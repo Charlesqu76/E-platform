@@ -1,32 +1,43 @@
-import { Button, Table, TableProps } from "antd";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { setMode, setModifyData, setOpen } from "@/store/retailer";
+import { EMode } from "@/type/retailer";
+import { Button, Popconfirm, Table, TableProps } from "antd";
 
 const ProductTable = () => {
+  const { productList } = useAppSelector((state) => state.retailer);
+  const dispatch = useAppDispatch();
+  const clickEdit = (data: any) => {
+    dispatch(setMode(EMode.EDIT));
+    dispatch(setOpen(true));
+    dispatch(setModifyData(data));
+  };
   const columns: TableProps["columns"] = [
     {
-      title: "ID",
-      key: "ID",
+      title: "id",
+      dataIndex: "id",
     },
     {
       title: "name",
-      key: "name",
+      dataIndex: "name",
     },
     {
       title: "description",
-      key: "description",
+      dataIndex: "description",
       filtered: true,
     },
     {
       title: "price",
-      key: "price",
+      dataIndex: "price",
     },
     {
       title: "quantity",
-      key: "quantity",
+      dataIndex: "quantity",
       sorter: true,
     },
+    { title: "rate", dataIndex: "rate", sorter: true },
     {
       title: "releaseDate",
-      key: "releaseDate",
+      dataIndex: "releaseDate",
     },
     {
       title: "operation",
@@ -37,27 +48,30 @@ const ProductTable = () => {
             size="small"
             color="primary"
             variant="filled"
+            onClick={() => clickEdit(record)}
           >
             EDIT
           </Button>
-          <Button
-            className="mr-1"
-            size="small"
-            color="default"
-            variant="filled"
+
+          <Popconfirm
+            title={undefined}
+            description="Are you sure to delete this item?"
+            // onConfirm={confirm}
+            // onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
           >
-            DISABLE
-          </Button>
-          <Button size="small" color="danger" variant="filled">
-            DEl
-          </Button>
+            <Button size="small" color="danger" variant="filled">
+              DElETE
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
   ];
   return (
     <div>
-      <Table rowKey={"ID"} dataSource={[{ ID: "1" }]} columns={columns} />
+      <Table rowKey={"id"} dataSource={productList} columns={columns} />
     </div>
   );
 };

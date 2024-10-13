@@ -23,7 +23,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
   };
 
   return (
-    <Layout className="min-h-screen">
+    <Layout className="h-screen">
       <Header className="flex items-center justify-between">
         <header className="text-white text-2xl">E-commerce Retailer MS</header>
         <Avatar className="bg-red-500">H</Avatar>
