@@ -1,5 +1,8 @@
 import { EMode } from "@/type/retailer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { common } from "./common";
 
 const data = [
   {
@@ -94,7 +97,7 @@ const data = [
   },
 ];
 
-export const retailerSlice = createSlice({
+export const retailer = createSlice({
   name: "retailer",
   initialState: {
     open: false,
@@ -115,6 +118,19 @@ export const retailerSlice = createSlice({
   },
 });
 
-export const { setOpen, setMode, setModifyData } = retailerSlice.actions;
+export const { setOpen, setMode, setModifyData } = retailer.actions;
 
-export default retailerSlice.reducer;
+const retailerStore = configureStore({
+  reducer: {
+    retailer: retailer.reducer,
+    common: common.reducer,
+  },
+});
+
+export default retailerStore;
+
+export type RootState = ReturnType<typeof retailerStore.getState>;
+export type AppDispatch = typeof retailerStore.dispatch;
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();

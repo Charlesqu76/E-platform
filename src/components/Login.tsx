@@ -1,17 +1,26 @@
+import { login } from "@/fetch";
 import { Button, Form, FormProps, Input } from "antd";
+import { useRouter } from "next/router";
 const { Item } = Form;
 
 type FieldType = {
-  username?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
 const LoginComponent = () => {
+  const router = useRouter();
+
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
+    if (await login(values)) {
+      router.push("/retailer");
+    } else {
+    }
+  };
+
   return (
-    <div>
+    <div className="flex flex-col items-center lg:mb-[50%]">
+      <span className="text-[28px] font-bold mb-2">Log In</span>
       <Form
         className="w-72 p-2"
         autoComplete="off"
@@ -19,21 +28,24 @@ const LoginComponent = () => {
         hideRequiredMark
       >
         <Item
-          label="username"
-          name={"username"}
-          rules={[{ required: true, message: "Please input your username!" }]}
+          name={"email"}
+          rules={[{ required: true, message: "Please input your email!" }]}
         >
-          <Input placeholder="username" />
+          <Input placeholder="Enter your email" size="large" />
         </Item>
         <Item
-          label="password"
           name={"password"}
           rules={[{ required: true, message: "Please input your password!" }]}
         >
-          <Input placeholder="password" />
+          <Input.Password placeholder="Password" size="large" />
         </Item>
         <Item>
-          <Button className="w-full" type="primary" htmlType="submit">
+          <Button
+            className="w-full"
+            type="primary"
+            htmlType="submit"
+            size="large"
+          >
             Log In
           </Button>
         </Item>

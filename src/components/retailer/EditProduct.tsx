@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store/retailer";
 import { setOpen } from "@/store/retailer";
 import { Button, Drawer, Form, FormProps, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
