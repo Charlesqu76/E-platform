@@ -2,9 +2,10 @@ import { useAppDispatch, useAppSelector } from "@/store/retailer";
 import { setMode, setModifyData, setOpen } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
 import { Button, Popconfirm, Table, TableProps } from "antd";
+import dayjs from "dayjs";
 
 const ProductTable = () => {
-  const { productList } = useAppSelector((state) => state.retailer);
+  const { products } = useAppSelector((state) => state.retailer);
   const dispatch = useAppDispatch();
   const clickEdit = (data: any) => {
     dispatch(setMode(EMode.EDIT));
@@ -34,10 +35,11 @@ const ProductTable = () => {
       dataIndex: "quantity",
       sorter: true,
     },
-    { title: "rate", dataIndex: "rate", sorter: true },
+    { title: "rate", dataIndex: "ratings", sorter: true },
     {
       title: "releaseDate",
-      dataIndex: "releaseDate",
+      dataIndex: "release_date",
+      render: (v) => <span>{dayjs(v).format("YYYY-MM-DD")}</span>,
     },
     {
       title: "operation",
@@ -71,7 +73,7 @@ const ProductTable = () => {
   ];
   return (
     <div>
-      <Table rowKey={"id"} dataSource={productList} columns={columns} />
+      <Table rowKey={"id"} dataSource={products} columns={columns} />
     </div>
   );
 };

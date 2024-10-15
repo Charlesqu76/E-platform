@@ -1,18 +1,29 @@
 import EditProduct from "@/components/retailer/EditProduct";
 import ProductTable from "@/components/retailer/ProductTable";
+import { getProducts } from "@/fetch/retailer";
 import { useAppDispatch } from "@/store/retailer";
-import { setMode, setModifyData, setOpen } from "@/store/retailer";
+import { setMode, setModifyData, setOpen, setProducts } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
 import { Button } from "antd";
+import { useEffect, useState } from "react";
 
-const Product = (props) => {
-  console.log(props);
+const Product = () => {
   const dispatch = useAppDispatch();
+
+  const getData = async () => {
+    const data = await getProducts();
+    dispatch(setProducts(data));
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   const clickAdd = () => {
     dispatch(setModifyData({}));
     dispatch(setOpen(true));
     dispatch(setMode(EMode.ADD));
   };
+
   return (
     <div className=" overflow-y-scroll">
       <div className="flex justify-end">
@@ -26,8 +37,10 @@ const Product = (props) => {
   );
 };
 
-export const getServerSideProps = () => {
-  return { props: { test: 1 } };
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Product;

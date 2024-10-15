@@ -1,9 +1,9 @@
 import React, { ReactElement } from "react";
 import type { MenuProps } from "antd";
-import { Avatar, Layout, Menu, theme } from "antd";
+import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { RETAILRE_PATH_MAP } from "@/const/retail";
 import { useRouter } from "next/router";
-import { getLastPathSegment } from "@/utils";
+import { getLastPathSegment, LogOut } from "@/utils";
 
 const { Header, Content, Sider } = Layout;
 
@@ -22,11 +22,20 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
     router.push("/retailer/" + e.key);
   };
 
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <span onClick={LogOut}>Layout</span>,
+    },
+  ];
+
   return (
     <Layout className="h-screen">
       <Header className="flex items-center justify-between">
         <header className="text-white text-2xl">E-commerce Retailer MS</header>
-        <Avatar className="bg-red-500">H</Avatar>
+        <Dropdown menu={{ items }}>
+          <Avatar className="bg-red-500 hover:cursor-pointer">H</Avatar>
+        </Dropdown>
       </Header>
       <Content className="p-4">
         <Layout

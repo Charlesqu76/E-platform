@@ -17,7 +17,7 @@ const buildQueryParams = (params: Record<string, string>): string => {
   return queryString ? `?${queryString}` : "";
 };
 
-const HOST = "http://localhost:3001/";
+const HOST = "http://localhost:3001/api/";
 
 const fetchUtility = async <T>(
   path: string,
@@ -32,6 +32,8 @@ const fetchUtility = async <T>(
   const fetchOptions: RequestInit = {
     method: method,
     headers: { ...defaultHeaders, ...options.headers },
+    mode: "cors",
+    credentials: "include",
   };
 
   if (method === "GET" && params) {

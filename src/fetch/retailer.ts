@@ -1,5 +1,6 @@
-import { TAddData, TModifyData } from "@/type/retailer";
+import { IProduct, TAddData, TModifyData } from "@/type/retailer";
 import { myFetch } from "@/utils";
+import Cookies from "js-cookie";
 
 export const getPortaritDaysData = async () => {
   const { data, error } = await myFetch.get("portraitDays");
@@ -15,11 +16,9 @@ export const getPortaritMonthData = async () => {
   }
 };
 
-export const getProductList = async () => {
-  const { data, error } = await myFetch.get("productList");
-  if (data) {
-    return data;
-  }
+export const getProducts = async (): Promise<IProduct[]> => {
+  const { data } = await myFetch.get<IProduct[]>("retailer/products");
+  return data || [];
 };
 
 export const modifyProduct = async (payload: TModifyData) => {

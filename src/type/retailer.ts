@@ -19,3 +19,13 @@ export type TAddData = {
 export type TModifyData = {
   id: string;
 } & TAddData;
+
+export interface IProduct {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  ratings: number;
+  release_date: string;
+}

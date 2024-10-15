@@ -6,7 +6,6 @@ import store from "@/store";
 import { Store } from "@reduxjs/toolkit";
 import "@/styles/globals.css";
 import App from "next/app";
-import { headerId } from "@/const";
 
 export default function MyApp({
   Component,
@@ -33,14 +32,14 @@ export default function MyApp({
 }
 
 MyApp.getInitialProps = async (context: AppContext) => {
-  const id = context.ctx.req?.headers[headerId];
+  // const id = context.ctx.req?.headers[headerId];
   const ctx = await App.getInitialProps(context);
-  const userInfo = { id, emial: "sadfasdf" };
+  // const userInfo = { id, emial: "sadfasdf" };
 
   // const { pathname } = context.router;
   // console.log("getInitialProps", pathname);
   // const { req } = context;
   //
   // console.log(req);
-  return { ...ctx, userInfo };
+  return { ...ctx };
 };
