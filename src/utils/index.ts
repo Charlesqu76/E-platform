@@ -45,3 +45,23 @@ export const LogOut = () => {
   Cookies.remove(AUTH_COOKID);
   location.reload();
 };
+
+export const parseCookies = (
+  cookieString: string
+): { [key: string]: string } => {
+  const cookies: { [key: string]: string } = {};
+
+  if (!cookieString) {
+    return cookies;
+  }
+
+  cookieString.split(";").forEach((cookie) => {
+    const [key, value] = cookie.split("=").map((part) => part.trim());
+
+    if (key && value) {
+      cookies[key] = decodeURIComponent(value);
+    }
+  });
+
+  return cookies;
+};

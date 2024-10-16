@@ -1,7 +1,9 @@
 import React from "react";
 import Star from "../Star";
 import Comments from "./Comments";
-import { IComment } from "@/type/product";
+import { TComment } from "@/type/product";
+import Image from "next/image";
+import { DEFAULT_PIC } from "@/const";
 
 interface ProductDetailProps {
   name: string;
@@ -10,7 +12,7 @@ interface ProductDetailProps {
   price: number;
   retailer: string;
   ratings: number;
-  comments: IComment[];
+  comments: TComment[];
   AISummary: string;
 }
 
@@ -27,7 +29,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex justify-center">
-        <img src={images[0]} alt={name} className="h-96 w-full object-cover" />
+        <div className="relative h-96 w-full">
+          <Image
+            src={images?.[0] || DEFAULT_PIC}
+            alt={name}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       </div>
       <div className="p-4">
         <h2 className="text-2xl font-semibold mb-2">{name}</h2>

@@ -29,9 +29,9 @@ const Search = () => {
   );
 
   return (
-    <div className="flex">
+    <div className="w-full max-w-[800px] ">
       <Input
-        className="border-red-300 border-2"
+        className="border-gray-200 border-2"
         placeholder="input search text"
         size="large"
         suffix={suffix}

@@ -1,24 +1,30 @@
 import ProductDetail from "@/components/ep/ProductDetail";
-import { getProductDetail } from "@/fetch/product";
-import { TProductDetail } from "@/type/product";
+import { getComments, getProductDetail } from "@/fetch/product";
+import { TComment, TProductDetail } from "@/type/product";
 import { GetServerSidePropsContext } from "next";
 
 interface IProps {
   detail: TProductDetail;
+  comments: TComment[];
+  id: string;
 }
 
-const Product = ({ detail }: IProps) => {
-  return <ProductDetail {...detail} />;
+const Product = ({ detail, id, comments }: IProps) => {
+  return <ProductDetail {...detail} comments={comments} />;
 };
 
 export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
   const { id } = query;
-  const data = await getProductDetail({ id: id as string });
+  const [detail, comments] = await Promise.all([
+    getProductDetail({ id: id as string }),
+    getComments({ id: id as string }),
+  ]);
   return {
     props: {
-      detail: data,
+      detail,
+      comments,
     },
   };
 };

@@ -1,16 +1,11 @@
-import { useAppDispatch, useAppSelector } from "@/store/retailer";
+import { addProduct, getProducts, modifyProduct } from "@/fetch/retailer";
+import { setProducts, useAppDispatch, useAppSelector } from "@/store/retailer";
 import { setOpen } from "@/store/retailer";
+import { EMode, TAddData } from "@/type/retailer";
 import { Button, Drawer, Form, FormProps, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
 
 const { Item } = Form;
-
-type FieldType = {
-  name?: string;
-  description?: string;
-  price?: number;
-  quantity?: number;
-};
 
 const EditProduct = () => {
   const [form] = Form.useForm();
@@ -18,9 +13,17 @@ const EditProduct = () => {
 
   const { open, modifyData, mode } = useAppSelector((state) => state.retailer);
   const dispatch = useAppDispatch();
-  const clickButton: FormProps<FieldType>["onFinish"] = (value) => {
+  const clickButton: FormProps<TAddData>["onFinish"] = async (value) => {
     setLoading(true);
     try {
+      if (mode === EMode.ADD) {
+        await addProduct(value);
+      }
+      if (mode === EMode.EDIT) {
+        await modifyProduct({ ...modifyData, ...value });
+      }
+
+      dispatch(setProducts(await getProducts()));
       dispatch(setOpen(false));
     } finally {
       setLoading(false);

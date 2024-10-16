@@ -55,7 +55,7 @@ const ProductTable = () => {
             EDIT
           </Button>
 
-          <Popconfirm
+          {/* <Popconfirm
             title={undefined}
             description="Are you sure to delete this item?"
             // onConfirm={confirm}
@@ -66,7 +66,7 @@ const ProductTable = () => {
             <Button size="small" color="danger" variant="filled">
               DElETE
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </div>
       ),
     },

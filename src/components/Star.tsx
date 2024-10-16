@@ -3,6 +3,7 @@ interface IProps {
 }
 
 const Star = ({ ratings }: IProps) => {
+  if (!ratings) return null;
   return (
     <div className="flex items-center">
       <span className="text-yellow-500">

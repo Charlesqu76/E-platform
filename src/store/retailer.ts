@@ -1,4 +1,4 @@
-import { EMode, IProduct } from "@/type/retailer";
+import { EMode, IProduct, TModifyData } from "@/type/retailer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
@@ -103,7 +103,7 @@ export const retailer = createSlice({
     open: false,
     mode: EMode.ADD,
     products: [] as IProduct[],
-    modifyData: {},
+    modifyData: {} as TModifyData,
   },
   reducers: {
     setOpen: (state, action: PayloadAction<boolean>) => {

@@ -1,45 +1,38 @@
-import RetailerLayout from "@/components/RetailerLayout";
-import { getFirstPathSegment, isRetailer } from "@/utils";
+import { getFirstPathSegment, parseCookies, verifyJwt } from "@/utils";
 import type { AppContext, AppProps } from "next/app";
 import { Provider } from "react-redux";
 import store from "@/store";
 import { Store } from "@reduxjs/toolkit";
-import "@/styles/globals.css";
 import App from "next/app";
+import Layout from "@/components/Layout";
+import { UserContext } from "@/store/context";
+import { AUTH_COOKID } from "@/const";
+import "@/styles/globals.css";
 
 export default function MyApp({
   Component,
   pageProps,
   router,
-  ...others
-}: AppProps) {
-  console.log(others);
-  const {} = others;
+  id,
+}: AppProps & { id: number }) {
   const { pathname } = router;
   const firstPath = getFirstPathSegment(pathname) as keyof typeof store;
-  const s = store[firstPath] as Store;
   return (
-    <Provider store={s}>
-      {isRetailer(pathname) ? (
-        <RetailerLayout pathname={pathname}>
-          {<Component {...pageProps} />}
-        </RetailerLayout>
-      ) : (
-        <Component {...pageProps} />
-      )}
-    </Provider>
+    <UserContext.Provider value={{ id }}>
+      <Provider store={store[firstPath] as Store}>
+        <Layout pathname={pathname}>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
+    </UserContext.Provider>
   );
 }
 
 MyApp.getInitialProps = async (context: AppContext) => {
-  // const id = context.ctx.req?.headers[headerId];
   const ctx = await App.getInitialProps(context);
-  // const userInfo = { id, emial: "sadfasdf" };
-
-  // const { pathname } = context.router;
-  // console.log("getInitialProps", pathname);
-  // const { req } = context;
-  //
-  // console.log(req);
-  return { ...ctx };
+  const cookieString = context.ctx.req?.headers.cookie;
+  const cookies = parseCookies(cookieString || "");
+  const authToken = cookies[AUTH_COOKID];
+  const id = authToken && cookies["id"];
+  return { ...ctx, id };
 };

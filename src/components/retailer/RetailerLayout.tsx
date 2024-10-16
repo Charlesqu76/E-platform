@@ -1,9 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { RETAILRE_PATH_MAP } from "@/const/retail";
 import { useRouter } from "next/router";
 import { getLastPathSegment, LogOut } from "@/utils";
+import { UserContext } from "@/store/context";
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,6 +14,9 @@ interface IProps {
 }
 
 const RetailerLayout = ({ pathname, children }: IProps) => {
+  const { id } = useContext(UserContext);
+  console.log("RetailerLayout", id);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -33,9 +37,11 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
     <Layout className="h-screen">
       <Header className="flex items-center justify-between">
         <header className="text-white text-2xl">E-commerce Retailer MS</header>
-        <Dropdown menu={{ items }}>
-          <Avatar className="bg-red-500 hover:cursor-pointer">H</Avatar>
-        </Dropdown>
+        {id && (
+          <Dropdown menu={{ items }}>
+            <Avatar className="bg-red-500 hover:cursor-pointer">H</Avatar>
+          </Dropdown>
+        )}
       </Header>
       <Content className="p-4">
         <Layout
@@ -45,15 +51,18 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu
-              mode="inline"
-              style={{ height: "100%" }}
-              items={RETAILRE_PATH_MAP}
-              onClick={clickMenu}
-              defaultSelectedKeys={[lastPath || ""]}
-            />
-          </Sider>
+          {id && (
+            <Sider style={{ background: colorBgContainer }} width={200}>
+              <Menu
+                mode="inline"
+                style={{ height: "100%" }}
+                items={RETAILRE_PATH_MAP}
+                onClick={clickMenu}
+                defaultSelectedKeys={[lastPath || ""]}
+              />
+            </Sider>
+          )}
+
           <Content className="p-4 min-h-32">{children}</Content>
         </Layout>
       </Content>

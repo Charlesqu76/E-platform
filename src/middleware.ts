@@ -13,13 +13,6 @@ export async function middleware(request: NextRequest) {
       return Response.redirect(
         new URL("/" + firstPath + "/login", request.url)
       );
-    } else {
-      const response = NextResponse.next();
-      response.cookies.set("id", String(id), {
-        httpOnly: true,
-        path: "/",
-      });
-      return response;
     }
   }
 }

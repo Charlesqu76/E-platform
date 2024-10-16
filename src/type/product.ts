@@ -9,10 +9,11 @@ export type TProduct = {
   AISummary: string;
 };
 
-export type TProductDetail = TProduct & { comments: IComment[] };
+export type TComment = {
+  customer: number;
+  comment: string;
+  rate: number;
+  name: string;
+};
 
-export interface IComment {
-  id: number;
-  username: string;
-  content: string;
-}
+export type TProductDetail = TProduct & { comments: TComment[] };

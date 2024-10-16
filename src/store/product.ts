@@ -9,21 +9,19 @@ export const product = createSlice({
   name: "product",
   initialState: {
     searchText: "",
-    productList: [] as TProduct[],
+    products: [] as TProduct[],
   },
   reducers: {
     setSearchText: (state, action: PayloadAction<string>) => {
       state.searchText = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(searchProductThunk.fulfilled, (state, { payload }) => {
-      state.productList = payload;
-    });
+    setProducts: (state, { payload }: PayloadAction<TProduct[]>) => {
+      state.products = payload;
+    },
   },
 });
 
-export const { setSearchText } = product.actions;
+export const { setSearchText, setProducts } = product.actions;
 
 const productStore = configureStore({
   reducer: {

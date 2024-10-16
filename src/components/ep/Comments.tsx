@@ -1,9 +1,9 @@
-import { IComment } from "@/type/product";
+import { TComment } from "@/type/product";
 import Comment from "./Comment";
 
 interface IProps {
   AISummary: string;
-  comments: IComment[];
+  comments: TComment[];
 }
 
 const Comments = ({ comments, AISummary }: IProps) => {
@@ -15,8 +15,8 @@ const Comments = ({ comments, AISummary }: IProps) => {
       </div>
       <p className="text-xl font-semibold mb-2">Comments</p>
       <div className="space-y-4">
-        {comments.map((comment) => (
-          <Comment key={comment.id} {...comment} />
+        {comments.map((comment, i) => (
+          <Comment key={i} {...comment} />
         ))}
       </div>
     </div>

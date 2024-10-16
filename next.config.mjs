@@ -13,6 +13,14 @@ const nextConfig = {
     "rc-table",
   ],
 
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+    ],
+  },
   async redirects() {
     return [
       {

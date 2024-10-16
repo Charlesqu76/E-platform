@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/retailer";
 import { setMode, setModifyData, setOpen, setProducts } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
 import { Button } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Product = () => {
   const dispatch = useAppDispatch();
