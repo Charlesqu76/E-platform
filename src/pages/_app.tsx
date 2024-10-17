@@ -5,20 +5,21 @@ import store from "@/store";
 import { Store } from "@reduxjs/toolkit";
 import App from "next/app";
 import Layout from "@/components/Layout";
-import { UserContext } from "@/store/context";
 import { AUTH_COOKID } from "@/const";
+import { TUserInfo } from "@/type/user";
 import "@/styles/globals.css";
+import { UserContext } from "@/store/context";
 
 export default function MyApp({
   Component,
   pageProps,
   router,
-  id,
-}: AppProps & { id: number }) {
+  userInfo,
+}: AppProps & { userInfo: TUserInfo | null }) {
   const { pathname } = router;
   const firstPath = getFirstPathSegment(pathname) as keyof typeof store;
   return (
-    <UserContext.Provider value={{ id }}>
+    <UserContext.Provider value={{ userInfo: userInfo }}>
       <Provider store={store[firstPath] as Store}>
         <Layout pathname={pathname}>
           <Component {...pageProps} />
@@ -30,9 +31,14 @@ export default function MyApp({
 
 MyApp.getInitialProps = async (context: AppContext) => {
   const ctx = await App.getInitialProps(context);
-  const cookieString = context.ctx.req?.headers.cookie;
+  let cookieString = "";
+  if (context.ctx.req) {
+    cookieString = context.ctx.req?.headers.cookie || "";
+  } else {
+    cookieString = document.cookie;
+  }
   const cookies = parseCookies(cookieString || "");
-  const authToken = cookies[AUTH_COOKID];
-  const id = authToken && cookies["id"];
-  return { ...ctx, id };
+  const userInfo = await verifyJwt<TUserInfo>(cookies[AUTH_COOKID]);
+
+  return { ...ctx, userInfo };
 };

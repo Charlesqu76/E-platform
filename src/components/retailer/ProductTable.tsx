@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/retailer";
 import { setMode, setModifyData, setOpen } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
-import { Button, Popconfirm, Table, TableProps } from "antd";
+import { Button, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 
 const ProductTable = () => {

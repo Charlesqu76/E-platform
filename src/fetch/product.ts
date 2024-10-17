@@ -2,13 +2,13 @@ import { TComment, TProduct, TProductDetail } from "@/type/product";
 import { myFetch } from "@/utils";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const searchProductThunk = createAsyncThunk(
-  "search",
-  async (payload: any) => {
-    const { data, error } = await myFetch.post<TProduct[]>("search", payload);
-    return data || [];
-  }
-);
+// export const searchProductThunk = createAsyncThunk(
+//   "products",
+//   async (payload: any) => {
+//     const { data, error } = await myFetch.post<TProduct[]>("search", payload);
+//     return data || [];
+//   }
+// );
 
 export const getProducts = async () => {
   const { data } = await myFetch.get<TProduct[]>("ep/products");

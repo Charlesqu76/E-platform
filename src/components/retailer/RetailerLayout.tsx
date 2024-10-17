@@ -3,7 +3,7 @@ import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { RETAILRE_PATH_MAP } from "@/const/retail";
 import { useRouter } from "next/router";
-import { getLastPathSegment, LogOut } from "@/utils";
+import { getLastPathSegment, logOut } from "@/utils";
 import { UserContext } from "@/store/context";
 
 const { Header, Content, Sider } = Layout;
@@ -14,9 +14,7 @@ interface IProps {
 }
 
 const RetailerLayout = ({ pathname, children }: IProps) => {
-  const { id } = useContext(UserContext);
-  console.log("RetailerLayout", id);
-
+  const { userInfo } = useContext(UserContext);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -29,7 +27,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: <span onClick={LogOut}>Layout</span>,
+      label: <span onClick={logOut}>Layout</span>,
     },
   ];
 
@@ -37,9 +35,11 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
     <Layout className="h-screen">
       <Header className="flex items-center justify-between">
         <header className="text-white text-2xl">E-commerce Retailer MS</header>
-        {id && (
+        {userInfo && (
           <Dropdown menu={{ items }}>
-            <Avatar className="bg-red-500 hover:cursor-pointer">H</Avatar>
+            <Avatar className="bg-red-500 hover:cursor-pointer">
+              {userInfo.name[0].toUpperCase()}
+            </Avatar>
           </Dropdown>
         )}
       </Header>
@@ -51,7 +51,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
             borderRadius: borderRadiusLG,
           }}
         >
-          {id && (
+          {userInfo && (
             <Sider style={{ background: colorBgContainer }} width={200}>
               <Menu
                 mode="inline"

@@ -29,3 +29,9 @@ export interface IProduct {
   ratings: number;
   release_date: string;
 }
+
+export enum ETimeSpan {
+  DAY = "day",
+  MONTH = "month",
+  YEAR = "year",
+}

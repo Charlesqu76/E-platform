@@ -2,6 +2,7 @@ import { AUTH_COOKID } from "@/const";
 import { myFetch } from "./fetch";
 import * as jose from "jose";
 import Cookies from "js-cookie";
+import { logout } from "@/fetch";
 
 export { myFetch };
 
@@ -25,25 +26,19 @@ export const generateRandomHexColor = () => {
   return `#${hexColor}`;
 };
 
-export const verifyJwt = async (
+export const verifyJwt = async <T>(
   token: string | undefined
-): Promise<boolean | number> => {
-  if (!token) return false;
+): Promise<T | null> => {
+  if (!token) return null;
   try {
     const encoder = new TextEncoder();
     const uint8Array = encoder.encode(process.env.JWT_SECRET);
     const { payload } = await jose.jwtVerify(token, uint8Array, {});
-    const { id } = payload as { id: number };
-    return id;
+    return payload as T;
   } catch (err) {
     console.error("verifyJwt", err);
-    return false;
+    return null;
   }
-};
-
-export const LogOut = () => {
-  Cookies.remove(AUTH_COOKID);
-  location.reload();
 };
 
 export const parseCookies = (
@@ -64,4 +59,11 @@ export const parseCookies = (
   });
 
   return cookies;
+};
+
+export const logOut = async () => {
+  await logout();
+  if (document) {
+    document.location.reload();
+  }
 };

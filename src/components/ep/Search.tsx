@@ -1,4 +1,3 @@
-import { searchProductThunk } from "@/fetch/product";
 import { setSearchText, useAppDispatch, useAppSelector } from "@/store/product";
 import { Button, Input } from "antd";
 import { AiFillPicture, AiTwotoneAudio } from "react-icons/ai";
@@ -7,7 +6,7 @@ const Search = () => {
   const { searchText } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
   const clickSearch = () => {
-    dispatch(searchProductThunk({ text: searchText }));
+    // dispatch(searchProductThunk({ text: searchText }));
   };
   const changeText = (e: { target: { value: string } }) => {
     dispatch(setSearchText(e.target.value));

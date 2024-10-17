@@ -1,5 +1,7 @@
+import { TSales } from "@/type/product";
 import { IProduct, TAddData, TModifyData } from "@/type/retailer";
 import { myFetch } from "@/utils";
+import { GetServerSidePropsContext } from "next";
 
 export const getPortaritDaysData = async () => {
   const { data, error } = await myFetch.get("portraitDays");
@@ -44,8 +46,12 @@ export const delProduct = async (payload: number) => {
   }
 };
 
-export const getHistorySalesData = async () => {
-  const { data, error } = await myFetch.get("retailer/sales/hostory");
+export const getHistorySalesData = async (ctx: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get<TSales>(
+    "retailer/sales/hostory",
+    {},
+    ctx
+  );
   if (data) {
     return data;
   }
@@ -53,6 +59,5 @@ export const getHistorySalesData = async () => {
 
 export const getPredictSalesData = async () => {
   const { data, error } = await myFetch.get("sales/prediction");
-  console.log(data);
   return data;
 };

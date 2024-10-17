@@ -17,3 +17,12 @@ export type TComment = {
 };
 
 export type TProductDetail = TProduct & { comments: TComment[] };
+
+export type TSales = {
+  [name: string]: {
+    [name: string]: {
+      price: number;
+      quantity: number;
+    };
+  };
+};

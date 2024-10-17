@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import RetailerLayout from "./retailer/RetailerLayout";
-import ProdcutLayout from "./product/ProductLayout";
+import ProdcutLayout from "./ep/ProductLayout";
 import { getFirstPathSegment } from "@/utils";
 
 interface IProps {

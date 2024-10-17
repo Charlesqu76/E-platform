@@ -1,13 +1,27 @@
-import { getLabelColors } from "@/utils/retailer";
+import { TSales } from "@/type/product";
+import { ETimeSpan } from "@/type/retailer";
+import {
+  formatSalesData,
+  generateTimeList,
+  getLabelColors,
+} from "@/utils/retailer";
 import { useMemo, useState } from "react";
 import { Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 interface IProps {
-  data: { [name: string]: number | string }[];
+  data: TSales;
   labels: string[];
 }
 
-const Sales = ({ data, labels = [] }: IProps) => {
+const Sales = ({ data = {}, labels = [] }: IProps) => {
+  const a = formatSalesData(
+    data,
+    generateTimeList("2023-1-1", "2027-1-1", ETimeSpan.YEAR),
+    ETimeSpan.YEAR
+  );
+
+  labels = Object.keys(data || {});
+
   const [visibleLines, setVisibleLines] = useState<
     { label: string; visible: boolean }[]
   >(
@@ -62,7 +76,7 @@ const Sales = ({ data, labels = [] }: IProps) => {
       <LineChart
         width={730}
         height={250}
-        data={data}
+        data={a || []}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
         <XAxis dataKey="TIMESPAN" />

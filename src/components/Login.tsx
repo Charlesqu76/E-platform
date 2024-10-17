@@ -8,12 +8,14 @@ type FieldType = {
   password: string;
 };
 
-const LoginComponent = () => {
-  const router = useRouter();
+interface IProps {
+  successCb: () => void;
+}
 
+const LoginComponent = ({ successCb }: IProps) => {
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     if (await login(values)) {
-      router.push("/retailer");
+      successCb();
     } else {
     }
   };

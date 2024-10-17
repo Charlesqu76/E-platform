@@ -1,21 +1,33 @@
+import { AUTH_COOKID } from "@/const";
 import { getHistorySalesData } from "@/fetch/retailer";
+import { TSales } from "@/type/product";
+import { Button } from "antd";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
 
 const SalesGraph = dynamic(() => import("@/components/retailer/SalesGraph"), {
   ssr: false,
 });
 
-const Sales = () => {
-  useEffect(() => {
-    getHistorySalesData();
-  }, []);
+export const getServerSideProps = async (ctx: any) => {
+  const historySalesData = await getHistorySalesData(ctx);
+  return {
+    props: {
+      historySalesData: historySalesData || {},
+    },
+  };
+};
+
+interface IProps {
+  data: TSales;
+}
+
+const Sales = ({ data }: IProps) => {
   return (
-    <div>
-      <SalesGraph
-        labels={["name", "test", "test2"]}
-        data={[{ name: 1, test: 2, TIMESPAN: "2" }]}
-      />
+    <div className="flex flex-col">
+      <div className="flex justify-end mb-4">
+        <Button>Generate Prediction Sales</Button>
+      </div>
+      <SalesGraph labels={["name", "test", "test2"]} data={data} />
     </div>
   );
 };
