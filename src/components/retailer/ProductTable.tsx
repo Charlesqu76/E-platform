@@ -1,16 +1,14 @@
-import { useAppDispatch, useAppSelector } from "@/store/retailer";
-import { setMode, setModifyData, setOpen } from "@/store/retailer";
+import { useProductsStore } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
 import { Button, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 
 const ProductTable = () => {
-  const { products } = useAppSelector((state) => state.retailer);
-  const dispatch = useAppDispatch();
+  const { setMode, setOpen, setModifyData, products } = useProductsStore();
   const clickEdit = (data: any) => {
-    dispatch(setMode(EMode.EDIT));
-    dispatch(setOpen(true));
-    dispatch(setModifyData(data));
+    setMode(EMode.EDIT);
+    setModifyData(data);
+    setOpen(true);
   };
   const columns: TableProps["columns"] = [
     {

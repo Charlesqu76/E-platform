@@ -1,8 +1,5 @@
-import { getFirstPathSegment, parseCookies, verifyJwt } from "@/utils";
+import { parseCookies, verifyJwt } from "@/utils";
 import type { AppContext, AppProps } from "next/app";
-import { Provider } from "react-redux";
-import store from "@/store";
-import { Store } from "@reduxjs/toolkit";
 import App from "next/app";
 import Layout from "@/components/Layout";
 import { AUTH_COOKID } from "@/const";
@@ -17,14 +14,11 @@ export default function MyApp({
   userInfo,
 }: AppProps & { userInfo: TUserInfo | null }) {
   const { pathname } = router;
-  const firstPath = getFirstPathSegment(pathname) as keyof typeof store;
   return (
     <UserContext.Provider value={{ userInfo: userInfo }}>
-      <Provider store={store[firstPath] as Store}>
-        <Layout pathname={pathname}>
-          <Component {...pageProps} />
-        </Layout>
-      </Provider>
+      <Layout pathname={pathname}>
+        <Component {...pageProps} />
+      </Layout>
     </UserContext.Provider>
   );
 }

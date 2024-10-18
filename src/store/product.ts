@@ -1,9 +1,7 @@
-import { searchProductThunk } from "@/fetch/product";
 import { TProduct } from "@/type/product";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { common } from "./common";
 
 export const product = createSlice({
   name: "product",
@@ -26,7 +24,6 @@ export const { setSearchText, setProducts } = product.actions;
 const productStore = configureStore({
   reducer: {
     product: product.reducer,
-    common: common.reducer,
   },
 });
 

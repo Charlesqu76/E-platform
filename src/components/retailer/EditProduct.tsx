@@ -1,6 +1,5 @@
 import { addProduct, getProducts, modifyProduct } from "@/fetch/retailer";
-import { setProducts, useAppDispatch, useAppSelector } from "@/store/retailer";
-import { setOpen } from "@/store/retailer";
+import { useProductsStore } from "@/store/retailer";
 import { EMode, TAddData } from "@/type/retailer";
 import { Button, Drawer, Form, FormProps, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
@@ -10,9 +9,7 @@ const { Item } = Form;
 const EditProduct = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
-  const { open, modifyData, mode } = useAppSelector((state) => state.retailer);
-  const dispatch = useAppDispatch();
+  const { open, modifyData, mode, setOpen, setProducts } = useProductsStore();
   const clickButton: FormProps<TAddData>["onFinish"] = async (value) => {
     setLoading(true);
     try {
@@ -22,13 +19,13 @@ const EditProduct = () => {
       if (mode === EMode.EDIT) {
         await modifyProduct({ ...modifyData, ...value });
       }
-
-      dispatch(setProducts(await getProducts()));
-      dispatch(setOpen(false));
+      setProducts(await getProducts());
+      setOpen(false);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (open) {
       form.setFieldsValue(modifyData);
@@ -41,10 +38,9 @@ const EditProduct = () => {
     <Drawer
       open={open}
       maskClosable={false}
-      onClose={() => dispatch(setOpen(false))}
+      onClose={() => setOpen(false)}
       width={"60%"}
       title={mode.toUpperCase()}
-      destroyOnClose
     >
       <Form
         form={form}

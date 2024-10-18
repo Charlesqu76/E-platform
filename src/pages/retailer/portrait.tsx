@@ -1,5 +1,7 @@
+import { getBuyData, getViewData } from "@/fetch/retailer";
 import { useIsMounted } from "@/hook";
 import { TTimeData } from "@/type/retailer";
+import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 
 const Time = dynamic(() => import("@/components/retailer/portrait/Time"));
@@ -40,6 +42,19 @@ const generateMonthlyData = (): TTimeData[] => {
   }));
 };
 
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const [buyData, vieData] = await Promise.all([
+    getBuyData(ctx),
+    getViewData(ctx),
+  ]);
+  return {
+    props: {
+      buyData,
+      vieData,
+    },
+  };
+};
+
 const Portrait = () => {
   const isMounted = useIsMounted();
   if (!isMounted) return <></>;
@@ -49,12 +64,6 @@ const Portrait = () => {
       <Month data={generateMonthlyData()} />
     </div>
   );
-};
-
-export const getServerSideProps = async () => {
-  return {
-    props: {},
-  };
 };
 
 export default Portrait;

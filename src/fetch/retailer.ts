@@ -3,22 +3,28 @@ import { IProduct, TAddData, TModifyData } from "@/type/retailer";
 import { myFetch } from "@/utils";
 import { GetServerSidePropsContext } from "next";
 
-export const getPortaritDaysData = async () => {
-  const { data, error } = await myFetch.get("portraitDays");
-  if (data) {
-    return data;
-  }
+export const getBuyData = async (ctx?: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get(
+    "retailer/portraitDaysBuy",
+    {},
+    ctx
+  );
+  return data;
 };
 
-export const getPortaritMonthData = async () => {
-  const { data, error } = await myFetch.get("portraitMonthes");
-  if (data) {
-    return data;
-  }
+export const getViewData = async (ctx?: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get(
+    "retailer/portraitDaysView",
+    {},
+    ctx
+  );
+  return data;
 };
 
-export const getProducts = async (): Promise<IProduct[]> => {
-  const { data } = await myFetch.get<IProduct[]>("retailer/products");
+export const getProducts = async (
+  ctx?: GetServerSidePropsContext
+): Promise<IProduct[]> => {
+  const { data } = await myFetch.get<IProduct[]>("retailer/products", {}, ctx);
   return data || [];
 };
 
@@ -58,6 +64,6 @@ export const getHistorySalesData = async (ctx: GetServerSidePropsContext) => {
 };
 
 export const getPredictSalesData = async () => {
-  const { data, error } = await myFetch.get("sales/prediction");
+  const { data, error } = await myFetch.get("retailer/sales/prediction");
   return data;
 };

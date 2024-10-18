@@ -1,19 +1,22 @@
 import ProductList from "@/components/ep/ProductList";
 import Search from "@/components/ep/Search";
 import { getProducts } from "@/fetch/product";
-import { setProducts, useAppDispatch, useAppSelector } from "@/store/product";
-import { useEffect } from "react";
+import { TProduct } from "@/type/product";
 
-const Index = () => {
-  const { products } = useAppSelector((state) => state.product);
-  const dispatch = useAppDispatch();
-
-  const ss = async () => {
-    dispatch(setProducts(await getProducts()));
+export const getServerSideProps = async () => {
+  const products = await getProducts();
+  return {
+    props: {
+      products,
+    },
   };
-  useEffect(() => {
-    ss();
-  }, []);
+};
+
+interface IProps {
+  products: TProduct[];
+}
+
+const Index = ({ products }: IProps) => {
   return (
     <div className="flex flex-col items-center">
       <Search />

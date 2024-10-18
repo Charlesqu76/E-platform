@@ -1,26 +1,39 @@
 import { TSales } from "@/type/product";
 import { ETimeSpan } from "@/type/retailer";
 import {
-  formatSalesData,
-  generateTimeList,
+  getFormatSalesData,
   getLabelColors,
+  getMaxAndMinDate,
+  getPickerType,
 } from "@/utils/retailer";
+import dayjs, { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
+import { DatePicker, Select } from "antd";
+const { RangePicker } = DatePicker;
+
 import { Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 interface IProps {
   data: TSales;
-  labels: string[];
 }
 
-const Sales = ({ data = {}, labels = [] }: IProps) => {
-  const a = formatSalesData(
-    data,
-    generateTimeList("2023-1-1", "2027-1-1", ETimeSpan.YEAR),
-    ETimeSpan.YEAR
-  );
+const Sales = ({ data = {} }: IProps) => {
+  const [timespan, setTimeSpan] = useState(ETimeSpan.MONTH);
 
-  labels = Object.keys(data || {});
+  const [range, setRange] = useState<[Dayjs, Dayjs]>([
+    dayjs().subtract(1, "month"),
+    dayjs(),
+  ]);
+  const showData = getFormatSalesData({
+    data,
+    startTime: range[0],
+    endTime: range[1],
+    timeSpan: timespan,
+  });
+
+  const { minDate, maxDate } = useMemo(() => getMaxAndMinDate(data), []);
+
+  const labels = Object.keys(data || {});
 
   const [visibleLines, setVisibleLines] = useState<
     { label: string; visible: boolean }[]
@@ -72,11 +85,34 @@ const Sales = ({ data = {}, labels = [] }: IProps) => {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="mb-4">
+        <Select
+          className="mr-4 w-32"
+          value={timespan}
+          onChange={(value) => {
+            setTimeSpan(value);
+          }}
+          options={[
+            { value: ETimeSpan.DAY, label: ETimeSpan.DAY },
+            { value: ETimeSpan.MONTH, label: ETimeSpan.MONTH },
+            { value: ETimeSpan.YEAR, label: ETimeSpan.YEAR },
+          ]}
+        />
+        <RangePicker
+          value={range}
+          picker={getPickerType(timespan) as any}
+          maxDate={maxDate}
+          minDate={minDate}
+          onChange={(range) => {
+            setRange(range as any);
+          }}
+        />
+      </div>
       <p className="mb-2">HISTORY SALES DATA</p>
       <LineChart
         width={730}
         height={250}
-        data={a || []}
+        data={showData || []}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
         <XAxis dataKey="TIMESPAN" />

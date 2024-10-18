@@ -1,14 +1,14 @@
 import EditProduct from "@/components/retailer/EditProduct";
 import ProductTable from "@/components/retailer/ProductTable";
 import { getProducts } from "@/fetch/retailer";
-import { useAppDispatch } from "@/store/retailer";
-import { setMode, setModifyData, setOpen, setProducts } from "@/store/retailer";
+import { useProductsStore } from "@/store/retailer";
 import { EMode, IProduct } from "@/type/retailer";
 import { Button } from "antd";
+import { GetServerSidePropsContext } from "next";
 import { useEffect } from "react";
 
-export const getServerSideProps = async () => {
-  const products = await getProducts();
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const products = await getProducts(ctx);
   return {
     props: {
       products,
@@ -21,20 +21,16 @@ interface IProps {
 }
 
 const Product = ({ products }: IProps) => {
-  const dispatch = useAppDispatch();
+  const { setMode, setModifyData, setOpen, setProducts } = useProductsStore();
 
-  // const getData = async () => {
-  //   dispatch(setProducts(data));
-  // };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    setProducts(products);
+  }, [products]);
 
   const clickAdd = () => {
-    dispatch(setModifyData({}));
-    dispatch(setOpen(true));
-    dispatch(setMode(EMode.ADD));
+    setModifyData({} as any);
+    setMode(EMode.ADD);
+    setOpen(true);
   };
 
   return (

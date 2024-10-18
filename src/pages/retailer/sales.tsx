@@ -1,5 +1,4 @@
-import { AUTH_COOKID } from "@/const";
-import { getHistorySalesData } from "@/fetch/retailer";
+import { getHistorySalesData, getPredictSalesData } from "@/fetch/retailer";
 import { TSales } from "@/type/product";
 import { Button } from "antd";
 import dynamic from "next/dynamic";
@@ -18,16 +17,22 @@ export const getServerSideProps = async (ctx: any) => {
 };
 
 interface IProps {
-  data: TSales;
+  historySalesData: TSales;
 }
 
-const Sales = ({ data }: IProps) => {
+const Sales = ({ historySalesData }: IProps) => {
+  const clickButton = async () => {
+    const data = await getPredictSalesData();
+    console.log(data);
+  };
   return (
     <div className="flex flex-col">
       <div className="flex justify-end mb-4">
-        <Button>Generate Prediction Sales</Button>
+        <Button type="primary" onClick={clickButton}>
+          Generate Prediction Sales
+        </Button>
       </div>
-      <SalesGraph labels={["name", "test", "test2"]} data={data} />
+      <SalesGraph data={historySalesData} />
     </div>
   );
 };
