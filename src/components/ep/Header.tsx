@@ -1,11 +1,10 @@
-import { UserContext } from "@/store/context";
+import { useCommonStore } from "@/store";
 import { logOut } from "@/utils";
 import { Dropdown } from "antd";
 import Link from "next/link";
-import { useContext } from "react";
 
 const Header = () => {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo } = useCommonStore((state) => state);
   const items = [
     {
       key: "1",

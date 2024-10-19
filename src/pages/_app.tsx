@@ -4,8 +4,9 @@ import App from "next/app";
 import Layout from "@/components/Layout";
 import { AUTH_COOKID } from "@/const";
 import { TUserInfo } from "@/type/user";
+import { Context, init, TStoreApi } from "@/store";
+import { useRef } from "react";
 import "@/styles/globals.css";
-import { UserContext } from "@/store/context";
 
 export default function MyApp({
   Component,
@@ -13,13 +14,17 @@ export default function MyApp({
   router,
   userInfo,
 }: AppProps & { userInfo: TUserInfo | null }) {
+  const ref = useRef<TStoreApi>();
+  if (!ref.current) {
+    ref.current = init({ userInfo });
+  }
   const { pathname } = router;
   return (
-    <UserContext.Provider value={{ userInfo: userInfo }}>
+    <Context.Provider value={ref.current}>
       <Layout pathname={pathname}>
         <Component {...pageProps} />
       </Layout>
-    </UserContext.Provider>
+    </Context.Provider>
   );
 }
 

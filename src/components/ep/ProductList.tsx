@@ -1,5 +1,6 @@
 import React from "react";
 import Product from "./Product";
+import { useProdcutsStore } from "@/store/products";
 
 interface Product {
   id: number;
@@ -11,11 +12,10 @@ interface Product {
   ratings: number;
 }
 
-interface ProductListProps {
-  products: Product[];
-}
+interface ProductListProps {}
 
-const ProductList: React.FC<ProductListProps> = ({ products }) => {
+const ProductList: React.FC<ProductListProps> = () => {
+  const { products = [] } = useProdcutsStore((state) => state);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6 p-4">
       {products.map((product) => (

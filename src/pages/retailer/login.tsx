@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <LoginComponent
       successCb={() => {
-        router.push("/retailer").then(() => window.location.reload());
+        window.location.href = "/retailer";
       }}
     />
   );

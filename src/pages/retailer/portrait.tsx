@@ -1,11 +1,14 @@
 import { getBuyData, getViewData } from "@/fetch/retailer";
-import { useIsMounted } from "@/hook";
 import { TTimeData } from "@/type/retailer";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 
-const Time = dynamic(() => import("@/components/retailer/portrait/Time"));
-const Month = dynamic(() => import("@/components/retailer/portrait/Month"));
+const Time = dynamic(() => import("@/components/retailer/portrait/Time"), {
+  ssr: false,
+});
+const Month = dynamic(() => import("@/components/retailer/portrait/Month"), {
+  ssr: false,
+});
 
 const generateTimeData = (): TTimeData[] => {
   const data: TTimeData[] = [];
@@ -56,8 +59,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 const Portrait = () => {
-  const isMounted = useIsMounted();
-  if (!isMounted) return <></>;
   return (
     <div className="flex flex-wrap">
       <Time data={generateTimeData()} />

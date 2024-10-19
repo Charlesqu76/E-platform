@@ -1,7 +1,9 @@
 import { EMode, IProduct, TModifyData } from "@/type/retailer";
-import { create } from "zustand";
+import { createContext, useContext } from "react";
+import { useStore } from "zustand";
+import { createStore } from "zustand/vanilla";
 
-export interface products {
+export interface IProductsStore {
   open: boolean;
   mode: EMode;
   modifyData: TModifyData;
@@ -11,24 +13,39 @@ export interface products {
   setModifyData: (payload: TModifyData) => void;
   setProducts: (payload: IProduct[]) => void;
 }
+export type storeApi = ReturnType<typeof init>;
 
-export const useProductsStore = create<products>((set) => ({
+const defaultVal = {
   open: false,
   mode: EMode.ADD,
   modifyData: {} as TModifyData,
-  products: [],
-  setOpen: (payload) => {
-    set({ open: payload });
-  },
-  setMode: (payload) => {
-    set({ mode: payload });
-  },
-  setModifyData: (payload) => {
-    set({ modifyData: payload });
-  },
-  setProducts: (payload) => {
-    set({ products: payload });
-  },
-}));
+  products: [] as IProduct[],
+};
 
-export default useProductsStore;
+export const RetailerContext = createContext<storeApi | null>(null);
+
+export const init = (props: Partial<typeof defaultVal>) =>
+  createStore<IProductsStore>()((set) => ({
+    ...defaultVal,
+    ...props,
+    setOpen: (payload) => {
+      set({ open: payload });
+    },
+    setMode: (payload) => {
+      set({ mode: payload });
+    },
+    setModifyData: (payload) => {
+      set({ modifyData: payload });
+    },
+    setProducts: (payload) => {
+      set({ products: payload });
+    },
+  }));
+
+export const useRetailer = <T>(selector: (store: IProductsStore) => T): T => {
+  const context = useContext(RetailerContext);
+  if (!context) {
+    throw new Error(`store must be used within StoreProvider`);
+  }
+  return useStore(context, selector);
+};

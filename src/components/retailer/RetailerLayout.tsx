@@ -1,10 +1,10 @@
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 import type { MenuProps } from "antd";
 import { Avatar, Dropdown, Layout, Menu, theme } from "antd";
 import { RETAILRE_PATH_MAP } from "@/const/retail";
 import { useRouter } from "next/router";
 import { getLastPathSegment, logOut } from "@/utils";
-import { UserContext } from "@/store/context";
+import { useCommonStore } from "@/store";
 
 const { Header, Content, Sider } = Layout;
 
@@ -14,7 +14,8 @@ interface IProps {
 }
 
 const RetailerLayout = ({ pathname, children }: IProps) => {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo } = useCommonStore((state) => state);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -26,7 +27,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
 
   const items: MenuProps["items"] = [
     {
-      key: "1",
+      key: "layout",
       label: <span onClick={logOut}>Layout</span>,
     },
   ];

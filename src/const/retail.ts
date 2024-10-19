@@ -5,8 +5,8 @@ enum ERetailerPath {
 }
 
 export const RETAILRE_PATH = [
-  ERetailerPath.portrait,
   ERetailerPath.product,
+  ERetailerPath.portrait,
   ERetailerPath.sales,
 ];
 

@@ -1,15 +1,16 @@
-import { setSearchText, useAppDispatch, useAppSelector } from "@/store/product";
+import { useProdcutsStore } from "@/store/products";
 import { Button, Input } from "antd";
 import { AiFillPicture, AiTwotoneAudio } from "react-icons/ai";
 
 const Search = () => {
-  const { searchText } = useAppSelector((state) => state.product);
-  const dispatch = useAppDispatch();
+  const { fetProducts, searchText, setSearchText } = useProdcutsStore(
+    (state) => state
+  );
   const clickSearch = () => {
-    // dispatch(searchProductThunk({ text: searchText }));
+    fetProducts();
   };
   const changeText = (e: { target: { value: string } }) => {
-    dispatch(setSearchText(e.target.value));
+    setSearchText(e.target.value);
   };
   const suffix = (
     <div className="flex items-center">

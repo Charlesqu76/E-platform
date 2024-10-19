@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { Fragment, ReactElement } from "react";
 import RetailerLayout from "./retailer/RetailerLayout";
 import ProdcutLayout from "./ep/ProductLayout";
 import { getFirstPathSegment } from "@/utils";
@@ -14,7 +14,7 @@ const Layout = ({ children, pathname }: IProps) => {
     retailer: RetailerLayout,
     ep: ProdcutLayout,
   };
-  const C = LayoutMap[firstPathname as keyof typeof LayoutMap];
+  const C = LayoutMap[firstPathname as keyof typeof LayoutMap] || Fragment;
   return <C pathname={pathname}>{children}</C>;
 };
 

@@ -1,6 +1,6 @@
 import { login } from "@/fetch";
 import { Button, Form, FormProps, Input } from "antd";
-import { useRouter } from "next/router";
+import { useState } from "react";
 const { Item } = Form;
 
 type FieldType = {
@@ -13,10 +13,16 @@ interface IProps {
 }
 
 const LoginComponent = ({ successCb }: IProps) => {
+  const [loading, setLoading] = useState(false);
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    if (await login(values)) {
-      successCb();
-    } else {
+    try {
+      setLoading(true);
+      if (await login(values)) {
+        successCb();
+      } else {
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,6 +53,7 @@ const LoginComponent = ({ successCb }: IProps) => {
             type="primary"
             htmlType="submit"
             size="large"
+            loading={loading}
           >
             Log In
           </Button>

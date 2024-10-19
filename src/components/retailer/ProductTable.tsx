@@ -1,15 +1,25 @@
-import { useProductsStore } from "@/store/retailer";
+import { useRetailer } from "@/store/retailer";
 import { EMode } from "@/type/retailer";
 import { Button, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 
 const ProductTable = () => {
-  const { setMode, setOpen, setModifyData, products } = useProductsStore();
+  const { setMode, setOpen, setModifyData, products } = useRetailer(
+    (state) => state
+  );
+
+  const clickAdd = () => {
+    setModifyData({} as any);
+    setMode(EMode.ADD);
+    setOpen(true);
+  };
+
   const clickEdit = (data: any) => {
     setMode(EMode.EDIT);
     setModifyData(data);
     setOpen(true);
   };
+
   const columns: TableProps["columns"] = [
     {
       title: "id",
@@ -71,6 +81,11 @@ const ProductTable = () => {
   ];
   return (
     <div>
+      <div className="flex justify-end">
+        <Button type="primary" onClick={clickAdd}>
+          ADD
+        </Button>
+      </div>
       <Table rowKey={"id"} dataSource={products} columns={columns} />
     </div>
   );

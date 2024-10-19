@@ -10,7 +10,7 @@ const Star = ({ ratings }: IProps) => {
         {"★".repeat(Math.round(ratings))}
         {"☆".repeat(5 - Math.round(ratings))}
       </span>
-      <span className="ml-2 text-gray-600">({ratings})</span>
+      <span className="ml-2 text-gray-600">({Math.round(ratings)})</span>
     </div>
   );
 };

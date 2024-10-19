@@ -25,13 +25,13 @@ const nextConfig = {
     return [
       {
         source: "/retailer",
-        destination: "/retailer/portrait",
-        permanent: false,
+        destination: "/retailer/product",
+        permanent: true,
       },
       {
         source: "/",
         destination: "/ep",
-        permanent: false,
+        permanent: true,
       },
     ];
   },

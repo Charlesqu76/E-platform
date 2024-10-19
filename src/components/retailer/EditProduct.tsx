@@ -1,5 +1,5 @@
 import { addProduct, getProducts, modifyProduct } from "@/fetch/retailer";
-import { useProductsStore } from "@/store/retailer";
+import { useRetailer } from "@/store/retailer";
 import { EMode, TAddData } from "@/type/retailer";
 import { Button, Drawer, Form, FormProps, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
@@ -9,7 +9,9 @@ const { Item } = Form;
 const EditProduct = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const { open, modifyData, mode, setOpen, setProducts } = useProductsStore();
+  const { open, modifyData, mode, setOpen, setProducts } = useRetailer(
+    (state) => state
+  );
   const clickButton: FormProps<TAddData>["onFinish"] = async (value) => {
     setLoading(true);
     try {

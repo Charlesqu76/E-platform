@@ -1,8 +1,8 @@
 import { TComment, TProduct, TProductDetail } from "@/type/product";
 import { myFetch } from "@/utils";
 
-export const getProducts = async () => {
-  const { data } = await myFetch.get<TProduct[]>("ep/products");
+export const getProducts = async (payload?: { text: string }) => {
+  const { data } = await myFetch.get<TProduct[]>("ep/products", payload);
   return data || [];
 };
 

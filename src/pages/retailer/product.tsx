@@ -1,11 +1,12 @@
-import EditProduct from "@/components/retailer/EditProduct";
 import ProductTable from "@/components/retailer/ProductTable";
 import { getProducts } from "@/fetch/retailer";
-import { useProductsStore } from "@/store/retailer";
-import { EMode, IProduct } from "@/type/retailer";
-import { Button } from "antd";
+import { init, RetailerContext, storeApi } from "@/store/retailer";
+import { IProduct } from "@/type/retailer";
 import { GetServerSidePropsContext } from "next";
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
+import { useRef } from "react";
+
+const EditProduct = dynamic(() => import("@/components/retailer/EditProduct"));
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const products = await getProducts(ctx);
@@ -21,28 +22,17 @@ interface IProps {
 }
 
 const Product = ({ products }: IProps) => {
-  const { setMode, setModifyData, setOpen, setProducts } = useProductsStore();
-
-  useEffect(() => {
-    setProducts(products);
-  }, [products]);
-
-  const clickAdd = () => {
-    setModifyData({} as any);
-    setMode(EMode.ADD);
-    setOpen(true);
-  };
-
+  const ref = useRef<storeApi>();
+  if (!ref.current) {
+    ref.current = init({ products });
+  }
   return (
-    <div className=" overflow-y-scroll">
-      <div className="flex justify-end">
-        <Button type="primary" onClick={clickAdd}>
-          ADD
-        </Button>
+    <RetailerContext.Provider value={ref.current}>
+      <div className=" overflow-y-scroll">
+        <ProductTable />
+        <EditProduct />
       </div>
-      <ProductTable />
-      <EditProduct />
-    </div>
+    </RetailerContext.Provider>
   );
 };
 
