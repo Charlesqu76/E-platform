@@ -1,5 +1,9 @@
 use actix_cors::Cors;
-use actix_web::{middleware::Logger, web, App, HttpServer};
+use actix_web::{
+    middleware::Logger,
+    web::{scope, Data},
+    App, HttpServer,
+};
 use dotenv::dotenv;
 use env_logger::Env;
 use reqwest::Client;
@@ -10,7 +14,10 @@ mod constant;
 mod model;
 mod mymiddlware;
 mod route;
+mod service;
 mod util;
+
+use route::{product, retailer, user};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -30,13 +37,13 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Logger::default())
             .wrap(Cors::permissive())
-            .app_data(web::Data::new(pool.clone()))
-            .app_data(web::Data::new(client.clone()))
+            .app_data(Data::new(pool.clone()))
+            .app_data(Data::new(client.clone()))
             .service(
-                web::scope("/api")
-                    .configure(route::retailer::config)
-                    .configure(route::user::config)
-                    .configure(route::product::config),
+                scope("/api")
+                    .configure(retailer::config)
+                    .configure(user::config)
+                    .configure(product::config),
             )
     })
     .bind("127.0.0.1:3001")?

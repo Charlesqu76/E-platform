@@ -4,11 +4,7 @@ use sqlx::FromRow;
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
 pub struct Purchase {
-    pub id: i32,
     pub time: NaiveDateTime,
-    pub gender: i32,
-    pub device: String,
-    pub geo: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -58,4 +54,22 @@ pub struct SalesInfo {
 pub struct CategoryItem {
     pub price: f64,
     pub quantity: i32,
+}
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct Gender {
+    gender: i32,
+    count: i64,
+}
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct Device {
+    device: String,
+    count: i64,
+}
+
+#[derive(Debug, Serialize, FromRow)]
+pub struct Geo {
+    geo: String,
+    count: i64,
 }

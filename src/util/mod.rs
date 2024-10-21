@@ -1,4 +1,4 @@
-pub mod openai;
+// pub mod openai;
 mod response;
 pub mod retailer;
 

@@ -11,10 +11,17 @@ pub struct ProductInfo {
     ratings: Option<f64>,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SSS {
+    pub products: Vec<ProductInfo>,
+    pub query: Option<String>,
+}
+
 #[derive(Serialize, Deserialize, FromRow, Debug)]
 pub struct HistoryBuy {
-    product: i32,
-    sum: i64,
+    name: String,
+    description: String,
+    price: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
