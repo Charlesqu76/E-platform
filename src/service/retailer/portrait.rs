@@ -192,7 +192,7 @@ pub async fn generate(
         age: 30,
     };
 
-    clint
+    let res = clint
         .post("http://localhost:3000/generate")
         .json(&my_data)
         .send()
