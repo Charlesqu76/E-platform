@@ -7,7 +7,7 @@ dockerOperate(){
     docker build -t platform-api .
     docker stop platform-api 
     docker rm platform-api
-    docker run -d --name platform-api -p 3001:3001 platform-api
+    docker run -d --name platform-api --env-file ../.api_env -p 3001:3001 platform-api
     docker image prune -af
 }
 

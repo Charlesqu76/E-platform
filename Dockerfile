@@ -19,7 +19,7 @@ RUN mkdir src && \
 RUN cargo build --release
 
 # Remove the dummy build artifacts
-RUN rm -rf src target/release/deps/your_app_name*
+RUN rm -rf src target/release/deps/platform-api*
 
 # Copy the actual source code
 COPY src src/
@@ -38,7 +38,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from builder
-COPY --from=builder /usr/src/app/target/release/your_app_name ./app
+COPY --from=builder /usr/src/app/target/release/platform-api ./app
 
 # Expose the port your app runs on
 EXPOSE 3001
