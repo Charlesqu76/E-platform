@@ -1,68 +1,90 @@
-import { getBuyData, getViewData } from "@/fetch/retailer";
-import { TTimeData } from "@/type/retailer";
+import {
+  getBuyData,
+  getDeviceData,
+  getGenderData,
+  getGeoData,
+  getViewData,
+} from "@/fetch/retailer";
+import { formatData, formatGenderToPie } from "@/utils/retailer";
+import { Button } from "antd";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 
 const Time = dynamic(() => import("@/components/retailer/portrait/Time"), {
   ssr: false,
 });
-const Month = dynamic(() => import("@/components/retailer/portrait/Month"), {
+
+const MyPie = dynamic(() => import("@/components/retailer/portrait/Pie"), {
   ssr: false,
 });
 
-const generateTimeData = (): TTimeData[] => {
-  const data: TTimeData[] = [];
-  for (let i = 0; i <= 24; i += 2) {
-    data.push({
-      VIEW: Math.floor(Math.random() * 1000) + 500,
-      BUY: Math.floor(Math.random() * 500) + 100,
-      TIMESPAN: `${i.toString().padStart(2, "0")}:00`,
-    });
-  }
-  return data;
-};
-
-const generateMonthlyData = (): TTimeData[] => {
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  return months.map((month) => ({
-    TIMESPAN: month,
-    VIEW: Math.floor(Math.random() * 1000) + 500,
-    BUY: Math.floor(Math.random() * 500) + 100,
-  }));
-};
+interface IProps {
+  buyData: any;
+  viewData: any;
+  geoData: any;
+  deviceData: any;
+  genderData: any;
+}
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const [buyData, vieData] = await Promise.all([
-    getBuyData(ctx),
-    getViewData(ctx),
-  ]);
+  const [buyData, viewData, geoData, deviceData, genderData] =
+    await Promise.all([
+      getBuyData(ctx),
+      getViewData(ctx),
+      getGeoData(ctx),
+      getDeviceData(ctx),
+      getGenderData(ctx),
+    ]);
   return {
     props: {
       buyData,
-      vieData,
+      viewData,
+      geoData,
+      deviceData,
+      genderData,
     },
   };
 };
 
-const Portrait = () => {
+const Portrait = ({
+  buyData,
+  viewData,
+  genderData,
+  geoData,
+  deviceData,
+}: IProps) => {
+  const formatGenderData = formatGenderToPie(genderData);
+  const l = [
+    { name: "gender", data: formatGenderData },
+    { name: "geo", data: geoData },
+    { name: "device", data: deviceData },
+  ];
+
+  const clickAnalyze = () => {
+    console.log("clickAnalyze");
+  };
+
   return (
-    <div className="flex flex-wrap">
-      <Time data={generateTimeData()} />
-      <Month data={generateMonthlyData()} />
+    <div className="flex flex-col">
+      <div className="mb-4 self-end">
+        <Button type="primary" onClick={clickAnalyze}>
+          AI Analyzed
+        </Button>
+      </div>
+      <div className="flex flex-wrap items-center mb-4">
+        {l.map(({ name, data }) => (
+          <div
+            key={name}
+            className="w-1/3 min-w-48 h-48 flex flex-col items-center"
+          >
+            <h3 className="font-bold mb-1">{name.toUpperCase()}</h3>
+            <MyPie data={data} dataKey={name} />
+          </div>
+        ))}
+      </div>
+      <div className="w-full h-96">
+        <Time data={formatData({ buyData, viewData })} />
+      </div>
     </div>
   );
 };

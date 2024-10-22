@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { GetServerSidePropsContext } from "next";
 
 type HttpMethod = "GET" | "POST";
@@ -56,6 +57,11 @@ const fetchUtility = async <T>(
     const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
+      const errMsg = `${url} --->  ${response.status} ${response.statusText}`;
+      if (!ctx) {
+        message.error(errMsg);
+      }
+      console.error(errMsg);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 

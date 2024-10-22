@@ -4,17 +4,32 @@ import { myFetch } from "@/utils";
 import { GetServerSidePropsContext } from "next";
 
 export const getBuyData = async (ctx?: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get("retailer/portrait/buy", {}, ctx);
+  return data;
+};
+
+export const getViewData = async (ctx?: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get("retailer/portrait/view", {}, ctx);
+  return data;
+};
+
+export const getGeoData = async (ctx?: GetServerSidePropsContext) => {
+  const { data, error } = await myFetch.get("retailer/portrait/geo", {}, ctx);
+  return data;
+};
+
+export const getGenderData = async (ctx?: GetServerSidePropsContext) => {
   const { data, error } = await myFetch.get(
-    "retailer/portraitDaysBuy",
+    "retailer/portrait/gender",
     {},
     ctx
   );
   return data;
 };
 
-export const getViewData = async (ctx?: GetServerSidePropsContext) => {
+export const getDeviceData = async (ctx?: GetServerSidePropsContext) => {
   const { data, error } = await myFetch.get(
-    "retailer/portraitDaysView",
+    "retailer/portrait/device",
     {},
     ctx
   );
@@ -24,7 +39,7 @@ export const getViewData = async (ctx?: GetServerSidePropsContext) => {
 export const getProducts = async (
   ctx?: GetServerSidePropsContext
 ): Promise<IProduct[]> => {
-  const { data } = await myFetch.get<IProduct[]>("retailer/products", {}, ctx);
+  const { data } = await myFetch.get<IProduct[]>("retailer/product", {}, ctx);
   return data || [];
 };
 

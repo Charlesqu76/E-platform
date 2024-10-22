@@ -6,7 +6,9 @@ import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 
-const EditProduct = dynamic(() => import("@/components/retailer/EditProduct"));
+const EditProduct = dynamic(() => import("@/components/retailer/EditProduct"), {
+  ssr: false,
+});
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const products = await getProducts(ctx);

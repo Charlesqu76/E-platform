@@ -1,46 +1,68 @@
 import { TTimeData } from "@/type/retailer";
-import { Area, AreaChart, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+const renderCustomizedLabel = (props: any) => {
+  const { x, y, width, value } = props;
+  const radius = 10;
+
+  return (
+    <text
+      x={x + width / 2}
+      y={y - radius}
+      textAnchor="middle"
+      dominantBaseline="middle"
+    >
+      {value}
+    </text>
+  );
+};
 
 const Time = ({ data }: { data: TTimeData[] }) => {
   return (
-    <div className="flex flex-col items-center">
-      <p className="mb-2">AMOUNT VIEW AND BUY ON AVERAGE 7 DAYS</p>
-      <AreaChart
-        width={730}
-        height={250}
+    <ResponsiveContainer width="100%">
+      <BarChart
+        height={600}
         data={data}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
         <defs>
-          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="buy" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+            <stop offset="95%" stopColor="#8884d8" stopOpacity={1} />
           </linearGradient>
-          <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+          <linearGradient id="view" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#82ca9d" stopOpacity={1} />
+            <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.6} />
           </linearGradient>
         </defs>
+        <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="TIMESPAN" />
         <YAxis />
-        <Tooltip />
+        <Tooltip
+          formatter={(value, name, props) => {
+            if (props.dataKey === "VIEW1") {
+              return [props.payload["VIEW"], "VIEW"];
+            }
+            return [value, name];
+          }}
+        />
         <Legend />
-        <Area
-          type="monotone"
-          dataKey="VIEW"
-          stroke="#8884d8"
-          fill="url(#colorUv)"
-          fillOpacity={1}
-        />
-        <Area
-          type="monotone"
-          dataKey="BUY"
-          stroke="#82ca9d"
-          fill="url(#colorPv)"
-          fillOpacity={1}
-        />
-      </AreaChart>
-    </div>
+        <Bar type="monotone" dataKey="BUY" fill="url(#buy)" stackId="a" />
+        <Bar type="monotone" dataKey="VIEW1" fill="url(#view)" stackId="a">
+          <LabelList dataKey="PERCENTAGE" content={renderCustomizedLabel} />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

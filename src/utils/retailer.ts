@@ -121,3 +121,43 @@ export const getMaxAndMinDate = (data: TSales) => {
     maxDate,
   };
 };
+
+export const formatData = ({
+  buyData = {},
+  viewData = {},
+}: {
+  buyData: any;
+  viewData: any;
+}) => {
+  const keys = Object.keys(buyData || {});
+  return keys.map((date) => ({
+    TIMESPAN: date,
+    VIEW: viewData[date],
+    BUY: buyData[date],
+    VIEW1: viewData[date] - buyData[date],
+    PERCENTAGE: `${((buyData[date] / viewData[date]) * 100).toFixed(2)}%`,
+  }));
+};
+
+export const formatGenderToPie = (
+  data: { gender: number; count: number }[]
+) => {
+  const getName = (gender: number) => {
+    let name = "undefined";
+
+    switch (gender) {
+      case 1:
+        name = "Male";
+        break;
+      case 2:
+        name = "Femail";
+        break;
+    }
+    return name;
+  };
+
+  return (data || []).map(({ gender, count }) => ({
+    gender: getName(gender),
+    count,
+  }));
+};
