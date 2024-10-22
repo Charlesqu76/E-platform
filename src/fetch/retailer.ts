@@ -60,11 +60,9 @@ export const addProduct = async (payload: TAddData) => {
   }
 };
 
-export const delProduct = async (payload: number) => {
-  const { data, error } = await myFetch.post("addProduct", payload);
-  if (data) {
-    return data;
-  }
+export const getAIsearch = async (payload: { name: string }) => {
+  const { data } = await myFetch.get("retailer/product/aisearch", payload);
+  return data;
 };
 
 export const getHistorySalesData = async (ctx: GetServerSidePropsContext) => {

@@ -1,7 +1,20 @@
-import { addProduct, getProducts, modifyProduct } from "@/fetch/retailer";
+import {
+  addProduct,
+  getAIsearch,
+  getProducts,
+  modifyProduct,
+} from "@/fetch/retailer";
 import { useRetailer } from "@/store/retailer";
 import { EMode, TAddData } from "@/type/retailer";
-import { Button, Drawer, Form, FormProps, Input, InputNumber } from "antd";
+import {
+  Button,
+  Drawer,
+  Form,
+  FormProps,
+  Input,
+  InputNumber,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 
 const { Item } = Form;
@@ -9,6 +22,7 @@ const { Item } = Form;
 const EditProduct = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [sLoading, setSLoading] = useState(false);
   const { open, modifyData, mode, setOpen, setProducts } = useRetailer(
     (state) => state
   );
@@ -25,6 +39,21 @@ const EditProduct = () => {
       setOpen(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const clickAisearch = async () => {
+    try {
+      setSLoading(true);
+      const name = form.getFieldValue("name");
+      if (!name) {
+        message.error("name is required");
+        return;
+      }
+      const data = await getAIsearch({ name: name });
+      console.log(data);
+    } finally {
+      setSLoading(false);
     }
   };
 
@@ -63,6 +92,9 @@ const EditProduct = () => {
           <InputNumber min={1} />
         </Item>
         <Item className="flex justify-end">
+          <Button className="mr-2" onClick={clickAisearch} loading={sLoading}>
+            AI Search
+          </Button>
           <Button type="primary" htmlType="submit" loading={loading}>
             CONFIRM
           </Button>

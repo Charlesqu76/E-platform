@@ -1,19 +1,48 @@
 import { TComment } from "@/type/product";
 import Comment from "./Comment";
+import { Button } from "antd";
+import { getSummary } from "@/fetch/product";
+import { useState } from "react";
 
 interface IProps {
-  AISummary: string;
   comments: TComment[];
+  id: string;
 }
 
-const Comments = ({ comments, AISummary }: IProps) => {
+const Comments = ({ comments, id }: IProps) => {
+  console.log(id);
+  const [loading, setLoading] = useState(false);
+  const [summary, SetSummary] = useState("");
+  const clickSummary = async () => {
+    try {
+      setLoading(true);
+      const data = await getSummary({ id });
+      if (data) {
+        SetSummary((data as any)?.summary || "");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="py-2">
-      <div className="text-xl font-semibold mb-2">
-        <p>AI Summary</p>
-        <p>{AISummary || "..."}</p>
+      <div className="flex justify-between">
+        <p className="text-xl font-semibold mb-2">Comments</p>
+        <Button
+          size="small"
+          type="primary"
+          onClick={clickSummary}
+          loading={loading}
+        >
+          Summary
+        </Button>
       </div>
-      <p className="text-xl font-semibold mb-2">Comments</p>
+      
+      {summary && (
+        <div className="p-2 border rounded-md mb-2 ">
+          <h3 className="font-bold">AI Summary</h3> <p>{summary}</p>
+        </div>
+      )}
       <div className="space-y-4">
         {comments.map((comment, i) => (
           <Comment key={i} {...comment} />

@@ -14,6 +14,7 @@ interface ProductDetailProps {
   ratings: number;
   comments: TComment[];
   AISummary: string;
+  id: string;
 }
 
 const ProductDetail: React.FC<ProductDetailProps> = ({
@@ -24,7 +25,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   retailer = "",
   ratings = 0,
   comments = [],
-  AISummary = "",
+  id,
 }) => {
   return (
     <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
@@ -44,7 +45,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         <p className="text-lg font-bold mb-2">${price.toFixed(2)}</p>
         <p className="text-gray-600 mb-2">Retailer: {retailer}</p>
         <Star ratings={ratings} />
-        <Comments comments={comments} AISummary={AISummary} />
+        {comments.length && <Comments comments={comments} id={id} />}
       </div>
     </div>
   );

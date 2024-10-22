@@ -9,10 +9,6 @@ interface IProps {
   id: string;
 }
 
-const Product = ({ detail, id, comments }: IProps) => {
-  return <ProductDetail {...detail} comments={comments} />;
-};
-
 export const getServerSideProps = async ({
   query,
 }: GetServerSidePropsContext) => {
@@ -25,8 +21,13 @@ export const getServerSideProps = async ({
     props: {
       detail,
       comments,
+      id,
     },
   };
+};
+
+const Product = ({ detail, id, comments }: IProps) => {
+  return <ProductDetail {...detail} comments={comments} id={id} />;
 };
 
 export default Product;

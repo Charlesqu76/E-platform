@@ -19,12 +19,11 @@ interface IProductsStore {
 }
 
 export const init = (props: Partial<typeof defaultVal>) => {
-  console.log("iiiiiinit", props);
   return createStore<IProductsStore>()((set, get) => ({
     ...defaultVal,
     ...props,
     fetProducts: async () => {
-      const data = await getProducts({ text: get().searchText });
+      const data = await getProducts({ q: get().searchText });
       set({ products: data });
     },
     setSearchText: (payload) => {
