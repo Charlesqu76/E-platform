@@ -56,25 +56,5 @@ pub async fn sales_prediction(pool: web::Data<PgPool>, req: HttpRequest) -> impl
 
     let id = 1;
 
-    let results = sqlx::query_as::<_, SalesInfo>(
-        "SELECT * 
-        FROM product AS p
-        INNER JOIN purchase AS pur ON (p.id = pur.product)
-        WHERE p.retailer = $1",
-    )
-    .bind(id)
-    .fetch_all(pool.get_ref())
-    .await;
-
-    match results {
-        Ok(results) => {
-            let res = categorize_data(&results);
-            println!("{:?}", res);
-            HttpResponse::Ok().json(json!(res.ok().unwrap()))
-        }
-        Err(err) => {
-            println!("{}", err);
-            HttpResponse::InternalServerError().finish()
-        }
-    }
+    HttpResponse::Ok().json({})
 }

@@ -73,3 +73,15 @@ pub struct Geo {
     geo: String,
     count: i64,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AISearchQuery {
+    pub name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AISearch {
+    price: Option<f64>,
+    description: String,
+    references: Vec<String>,
+}

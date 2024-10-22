@@ -1,6 +1,11 @@
+use std::sync::Arc;
+
 use crate::{
     constant::AUTH_,
-    model::retailer::{AddProductInfo, ModifyProductInfo, ProductInfo},
+    model::{
+        product::QueryDetail,
+        retailer::{AISearch, AISearchQuery, AddProductInfo, ModifyProductInfo, ProductInfo},
+    },
     util::decode_jwt,
 };
 use actix_web::{
@@ -8,6 +13,8 @@ use actix_web::{
     web::{self},
     HttpRequest, HttpResponse, Responder,
 };
+use reqwest::Client;
+use serde_json::json;
 use sqlx::PgPool;
 
 #[get("")]
@@ -121,5 +128,27 @@ pub async fn modify_product(
             println!("{:?}", e);
             HttpResponse::InternalServerError().finish()
         }
+    }
+}
+
+#[get("aisearch")]
+pub async fn aisearch(
+    client: web::Data<Arc<Client>>,
+    query: web::Query<AISearchQuery>,
+) -> impl Responder {
+    let q = AISearchQuery {
+        name: query.name.clone(),
+    };
+    let res = client
+        .get("http://localhost:3002/aisearch")
+        .query(&q)
+        .send()
+        .await
+        .unwrap();
+
+    let a = &res.json::<AISearch>().await;
+    match a {
+        Ok(r) => HttpResponse::Ok().json(r),
+        Err(_) => HttpResponse::Ok().json(json!({"content":1 })),
     }
 }

@@ -1,4 +1,4 @@
-use crate::service::product::{aisummary, comments, detail, products, purchase};
+use crate::service::product::{comments, detail, products, summary};
 use actix_web::web;
 
 pub fn config(cfg: &mut web::ServiceConfig) {
@@ -7,7 +7,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .service(products)
             .service(detail)
             .service(comments)
-            .service(aisummary)
-            .service(purchase),
+            .service(summary),
     );
 }
