@@ -1,34 +1,47 @@
-# Use the official Rust image as a builder
-FROM rust:latest as builder
+# Build stage
+FROM rust:1.75-slim-bullseye as builder
 
-# Set the working directory
-WORKDIR /usr/src/myapp
+WORKDIR /usr/src/app
 
-# Copy the Cargo.toml and Cargo.lock files
+# Install required dependencies
+RUN apt-get update && \
+    apt-get install -y pkg-config libssl-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy manifests
 COPY Cargo.toml Cargo.lock ./
 
-# Create a dummy source file to help cargo fetch dependencies
-RUN mkdir src && echo "fn main() {}" > src/main.rs
+# Create a dummy main.rs to build dependencies
+RUN mkdir src && \
+    echo "fn main() {}" > src/main.rs
 
-# Build the dependencies
-RUN cargo build --release
-# Now remove the dummy source file
-RUN rm -f target/release/deps/myapp*
-
-# Copy the source code
-COPY . .
-
-# Build the actual application
+# Build dependencies
 RUN cargo build --release
 
-# Use a smaller image for the final build
-FROM debian:buster-slim
+# Remove the dummy build artifacts
+RUN rm -rf src target/release/deps/your_app_name*
 
-# Copy the built binary from the builder image
-COPY --from=builder /usr/src/myapp/target/release/myapp .
+# Copy the actual source code
+COPY src src/
 
-# Expose the port the app runs on
+# Build the application
+RUN cargo build --release
+
+# Runtime stage
+FROM debian:bullseye-slim
+
+WORKDIR /usr/local/bin
+
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y libssl1.1 ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy the binary from builder
+COPY --from=builder /usr/src/app/target/release/your_app_name ./app
+
+# Expose the port your app runs on
 EXPOSE 3001
 
-# Run the application
-CMD ["./myapp"]
+# Run the binary
+CMD ["./app"]
