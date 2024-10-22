@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::{
     model::retailer::{Device, Gender, Geo, Purchase},
-    util::retailer::categorize_time_data,
+    util::{format_url, retailer::categorize_time_data},
 };
 use actix_web::{
     get,
@@ -193,7 +193,7 @@ pub async fn generate(
     };
 
     let res = clint
-        .post("http://localhost:3000/generate")
+        .post(format_url("generate"))
         .json(&my_data)
         .send()
         .await;

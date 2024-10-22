@@ -6,7 +6,7 @@ use crate::{
         product::QueryDetail,
         retailer::{AISearch, AISearchQuery, AddProductInfo, ModifyProductInfo, ProductInfo},
     },
-    util::decode_jwt,
+    util::{decode_jwt, format_url},
 };
 use actix_web::{
     get, post,
@@ -140,7 +140,7 @@ pub async fn aisearch(
         name: query.name.clone(),
     };
     let res = client
-        .get("http://localhost:3002/aisearch")
+        .get(format_url("aisearch"))
         .query(&q)
         .send()
         .await

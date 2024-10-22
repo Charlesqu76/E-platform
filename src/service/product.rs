@@ -1,8 +1,11 @@
 use std::sync::Arc;
 
-use crate::model::product::{
-    CommitSummary, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
-    SummaryReturn,
+use crate::{
+    model::product::{
+        CommitSummary, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
+        SummaryReturn,
+    },
+    util::format_url,
 };
 use actix_web::{get, post, web, HttpResponse, Responder};
 use reqwest::Client;
@@ -18,8 +21,8 @@ pub async fn products(
 
     let q = ProductQuery { q: query.q.clone() };
 
-    let res = client
-        .get("http://127.0.0.1:3002/recommend")
+    let res: Vec<ProductInfo> = client
+        .get(format_url("recommend"))
         .query(&q)
         .send()
         .await
@@ -83,7 +86,7 @@ pub async fn summary(
         id: query.id.clone(),
     };
     let res = client
-        .get("http://localhost:3002/summary")
+        .get(format_url("summary"))
         .query(&q)
         .send()
         .await

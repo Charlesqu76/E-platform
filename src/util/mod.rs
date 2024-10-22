@@ -1,4 +1,3 @@
-// pub mod openai;
 mod response;
 pub mod retailer;
 
@@ -29,4 +28,10 @@ pub fn decode_jwt(jwt: &str) -> Result<Claimss, Error> {
     validation.validate_exp = false;
     let token_data = decode::<Claimss>(jwt, &decoding_key, &validation)?;
     Ok(token_data.claims)
+}
+
+pub const HOST: &str = "https://charlescrazy.fun/ai/";
+
+pub fn format_url(path: &str) -> String {
+    format!("{}{}", HOST, path)
 }
