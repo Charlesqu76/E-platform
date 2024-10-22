@@ -20,7 +20,12 @@ const buildQueryParams = (params: Record<string, string>): string => {
   return queryString ? `?${queryString}` : "";
 };
 
-const HOST = "http://localhost:3001/api/";
+export const HOST =
+  process.env.NODE_ENV === "production"
+    ? "https://charlescrazy.fun/api/"
+    : "http://localhost:3001/api/";
+
+// export const HOST = "https://charlescrazy.fun/api/";
 
 const fetchUtility = async <T>(
   path: string,
