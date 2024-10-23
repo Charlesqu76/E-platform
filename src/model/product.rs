@@ -5,9 +5,8 @@ use sqlx::FromRow;
 pub struct ProductInfo {
     id: i32,
     name: String,
-    description: String,
+    description: Option<String>,
     price: f64,
-    quantity: i32,
     ratings: Option<f64>,
 }
 

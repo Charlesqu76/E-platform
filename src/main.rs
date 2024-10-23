@@ -46,7 +46,7 @@ async fn main() -> std::io::Result<()> {
                     .configure(product::config),
             )
     })
-    .bind("0.0.0.0:3001")?
+    .bind("0.0.0.0:3004")?
     .run()
     .await
 }

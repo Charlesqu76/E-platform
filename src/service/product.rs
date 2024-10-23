@@ -2,8 +2,7 @@ use std::sync::Arc;
 
 use crate::{
     model::product::{
-        CommitSummary, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
-        SummaryReturn,
+        ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts, SummaryReturn,
     },
     util::format_url,
 };

@@ -8,7 +8,6 @@ use crate::model::{Claims, Claimss};
 
 pub fn create_jwt(id: i32, email: &str, name: &str) -> String {
     let claims = Claims { id, email, name };
-    // const SECRET: &[u8] = env::var("SECRET").unwrap();
     const SECRET: &[u8] = b"my_secret_key";
 
     let token = encode(
