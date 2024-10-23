@@ -25,3 +25,10 @@
     text-wrap: balance;
   }
 }
+
+code {
+  display: inline-block;
+  width: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

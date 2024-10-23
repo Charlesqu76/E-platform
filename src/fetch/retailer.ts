@@ -60,11 +60,6 @@ export const addProduct = async (payload: TAddData) => {
   }
 };
 
-export const getAIsearch = async (payload: { name: string }) => {
-  const { data } = await myFetch.get("retailer/product/aisearch", payload);
-  return data;
-};
-
 export const getHistorySalesData = async (ctx: GetServerSidePropsContext) => {
   const { data, error } = await myFetch.get<TSales>(
     "retailer/sales/hostory",
@@ -76,7 +71,27 @@ export const getHistorySalesData = async (ctx: GetServerSidePropsContext) => {
   }
 };
 
-export const getPredictSalesData = async () => {
-  const { data, error } = await myFetch.get("retailer/sales/prediction");
+export const getAIsearch = async (payload: { name: string }) => {
+  const { data } = await myFetch.get("aisearch?name=macbook", payload);
   return data;
+};
+
+export const getPredictSalesData = async (
+  cb: (text: string, done: boolean) => void
+) => {
+  return myFetch.stream({ path: "predict", params: { id: "1" }, cb });
+};
+
+export const getUserPortrait = async (
+  cb: (text: string, done: boolean) => void
+) => {
+  return myFetch.stream({ path: "generate", params: { id: "1" }, cb });
+};
+
+export const getAiData = async (payload: {
+  path: string;
+  params?: Record<string, string>;
+  cb: (text: string, done: boolean) => void;
+}) => {
+  return myFetch.stream(payload);
 };

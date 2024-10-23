@@ -1,6 +1,5 @@
-import { getHistorySalesData, getPredictSalesData } from "@/fetch/retailer";
+import { getHistorySalesData } from "@/fetch/retailer";
 import { TSales } from "@/type/product";
-import { Button } from "antd";
 import dynamic from "next/dynamic";
 
 const SalesGraph = dynamic(() => import("@/components/retailer/SalesGraph"), {
@@ -21,17 +20,8 @@ interface IProps {
 }
 
 const Sales = ({ historySalesData }: IProps) => {
-  const clickButton = async () => {
-    const data = await getPredictSalesData();
-    console.log(data);
-  };
   return (
     <div className="flex flex-col">
-      <div className="flex justify-end mb-4">
-        <Button type="primary" onClick={clickButton}>
-          Generate Prediction Sales
-        </Button>
-      </div>
       <SalesGraph data={historySalesData} />
     </div>
   );

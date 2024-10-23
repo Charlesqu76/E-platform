@@ -21,6 +21,10 @@ const { Item } = Form;
 
 const EditProduct = () => {
   const [form] = Form.useForm();
+  const [option, setOption] = useState<{
+    reason: string;
+    references: string[];
+  }>();
   const [loading, setLoading] = useState(false);
   const [sLoading, setSLoading] = useState(false);
   const { open, modifyData, mode, setOpen, setProducts } = useRetailer(
@@ -51,7 +55,14 @@ const EditProduct = () => {
         return;
       }
       const data = await getAIsearch({ name: name });
-      console.log(data);
+      if (data && typeof data === "object") {
+        const { description, price, reason, references } = data as any;
+        form.setFieldsValue({ price, description });
+        setOption({
+          reason,
+          references,
+        });
+      }
     } finally {
       setSLoading(false);
     }
@@ -100,6 +111,14 @@ const EditProduct = () => {
           </Button>
         </Item>
       </Form>
+      <div>
+        <h3 className="font-bold">References</h3>
+        <div className="flex flex-col">
+          {option?.references.map((v) => (
+            <a href={v}>{v}</a>
+          ))}
+        </div>
+      </div>
     </Drawer>
   );
 };

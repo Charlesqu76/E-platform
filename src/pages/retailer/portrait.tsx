@@ -6,7 +6,6 @@ import {
   getViewData,
 } from "@/fetch/retailer";
 import { formatData, formatGenderToPie } from "@/utils/retailer";
-import { Button } from "antd";
 import { GetServerSidePropsContext } from "next";
 import dynamic from "next/dynamic";
 
@@ -66,11 +65,6 @@ const Portrait = ({
 
   return (
     <div className="flex flex-col">
-      <div className="mb-4 self-end">
-        <Button type="primary" onClick={clickAnalyze}>
-          AI Analyzed
-        </Button>
-      </div>
       <div className="flex flex-wrap items-center mb-4">
         {l.map(({ name, data }) => (
           <div
