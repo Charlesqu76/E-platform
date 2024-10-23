@@ -83,7 +83,7 @@ const fetchUtility = async <T>(
 
 export const AI_HOST =
   process.env.NODE_ENV === "production"
-    ? "https://charlescrazy.fun/api/"
+    ? "https://charlescrazy.fun/ai/"
     : "http://127.0.0.1:3002/ai/";
 
 const stream = async ({
