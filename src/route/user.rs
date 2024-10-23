@@ -3,10 +3,7 @@ use crate::{
     model::user::{GetUserInfo, LoginInfo, UserInfo},
     util::create_jwt,
 };
-use actix_web::{
-    cookie::{Cookie, CookieBuilder},
-    get, post, web, HttpRequest, HttpResponse, Responder,
-};
+use actix_web::{cookie::Cookie, get, post, web, HttpRequest, HttpResponse, Responder};
 use sqlx::PgPool;
 
 pub fn config(cfg: &mut web::ServiceConfig) {
