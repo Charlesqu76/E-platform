@@ -42,6 +42,14 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    domains: [
+      "127.0.0.1",
+      "localhost",
+      "via.placeholder.com",
+      "http://charlescrazy.fun/",
+    ],
+  },
 };
 
 export default nextConfig;

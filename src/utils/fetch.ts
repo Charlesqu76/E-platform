@@ -20,12 +20,16 @@ const buildQueryParams = (params: Record<string, string>): string => {
   return queryString ? `?${queryString}` : "";
 };
 
-// const HOST =
-//   process.env.NODE_ENV === "production"
-//     ? "https://charlescrazy.fun/api/"
-//     : "http://127.0.0.1:3001/api/";
+export const HOST =
+  process.env.NODE_ENV === "production"
+    ? "https://charlescrazy.fun/"
+    : "http://127.0.0.1:3001/";
 
-const HOST = "https://charlescrazy.fun/api/";
+const prefix = "api/";
+
+export const MY_PATH = HOST + prefix;
+
+// const HOST = "https://charlescrazy.fun/api/";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
@@ -36,7 +40,7 @@ const fetchUtility = async <T>(
   options: FetchOptions,
   ctx?: GetServerSidePropsContext
 ): Promise<FetchResult<T>> => {
-  let url = HOST + path;
+  let url = MY_PATH + path;
 
   const { method, params, body } = options;
 
