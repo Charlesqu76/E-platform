@@ -59,9 +59,13 @@ export const parseCookies = (
   return cookies;
 };
 
-export const logOut = async () => {
-  await logout();
+const deleteCookie = (cookieName: string): void => {
+  document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+};
+
+export const logOut = async (cookieName: string) => {
   if (document) {
+    deleteCookie(cookieName);
     document.location.reload();
   }
 };

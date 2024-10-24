@@ -7,6 +7,7 @@ import { getLastPathSegment, logOut } from "@/utils";
 import { useCommonStore } from "@/store";
 import AISupport from "./AISupport";
 import { init, RetailerContext, storeApi } from "@/store/r";
+import { AUTH_MAP } from "@/const";
 
 const { Header, Content, Sider } = Layout;
 
@@ -34,7 +35,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
   const items: MenuProps["items"] = [
     {
       key: "layout",
-      label: <span onClick={logOut}>Layout</span>,
+      label: <span onClick={() => logOut(AUTH_MAP["retailer"])}>Layout</span>,
     },
   ];
 

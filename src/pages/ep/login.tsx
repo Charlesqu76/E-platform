@@ -6,7 +6,7 @@ const Login = () => {
       <LoginComponent
         p="/ep"
         successCb={() => {
-          window.location.reload();
+          window.location.href = "/ep";
         }}
       />
     </div>

@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { getFirstPathSegment, verifyJwt } from "./utils";
 import { NEED_LOGIN_PATH, AUTH_MAP } from "./const";
-import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

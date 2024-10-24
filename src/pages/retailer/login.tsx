@@ -5,7 +5,7 @@ const Login = () => {
     <LoginComponent
       p="/retailer"
       successCb={() => {
-        window.location.reload();
+        window.location.href = "/retailer/product";
       }}
     />
   );

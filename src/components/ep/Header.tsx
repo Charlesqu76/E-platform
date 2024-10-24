@@ -1,3 +1,4 @@
+import { AUTH_MAP } from "@/const";
 import { useCommonStore } from "@/store";
 import { logOut } from "@/utils";
 import { Dropdown } from "antd";
@@ -8,7 +9,7 @@ const Header = () => {
   const items = [
     {
       key: "1",
-      label: <span onClick={logOut}>Layout</span>,
+      label: <span onClick={() => logOut(AUTH_MAP["ep"])}>Layout</span>,
     },
   ];
 
