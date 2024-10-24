@@ -1,4 +1,3 @@
-mod response;
 pub mod retailer;
 
 use crate::{

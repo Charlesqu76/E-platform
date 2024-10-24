@@ -3,7 +3,7 @@ pub mod product;
 pub mod sales;
 
 use crate::{
-    model::retailer::{AIsearchQuery, NormalQuery, NormalSend},
+    model::retailer::{AISearch, AIsearchQuery, NormalQuery, NormalSend},
     util::{convert_reqwest_stream, format_url, get_id},
 };
 use actix_web::{
@@ -42,9 +42,8 @@ pub async fn normal(
 pub async fn aisearch(
     client: web::Data<Arc<Client>>,
     query: web::Query<AIsearchQuery>,
-    req: HttpRequest,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
+    // let id: i32 = get_id(req);
     let q = AIsearchQuery {
         name: query.name.clone(),
     };
@@ -53,8 +52,10 @@ pub async fn aisearch(
         .query(&q)
         .send()
         .await
+        .expect("error")
+        .json::<AISearch>()
+        .await
         .expect("error");
 
-    let stream = convert_reqwest_stream(response);
-    HttpResponse::Ok().streaming(stream)
+    HttpResponse::Ok().json(response)
 }

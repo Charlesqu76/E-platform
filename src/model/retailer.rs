@@ -93,7 +93,7 @@ pub struct AIsearchQuery {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AISearch {
-    price: Option<f64>,
+    price: f64,
     description: String,
     references: Vec<String>,
 }
