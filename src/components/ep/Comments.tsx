@@ -4,13 +4,15 @@ import { Button } from "antd";
 import { getSummary } from "@/fetch/product";
 import { useState } from "react";
 
+import dynamic from "next/dynamic";
+const Markdown = dynamic(() => import("react-markdown"));
+
 interface IProps {
   comments: TComment[];
   id: string;
 }
 
 const Comments = ({ comments, id }: IProps) => {
-  console.log(id);
   const [loading, setLoading] = useState(false);
   const [summary, SetSummary] = useState("");
   const clickSummary = async () => {
@@ -37,10 +39,11 @@ const Comments = ({ comments, id }: IProps) => {
           Summary
         </Button>
       </div>
-      
+
       {summary && (
         <div className="p-2 border rounded-md mb-2 ">
-          <h3 className="font-bold">AI Summary</h3> <p>{summary}</p>
+          <h3 className="font-bold">AI Summary</h3>
+          <Markdown>{summary}</Markdown>
         </div>
       )}
       <div className="space-y-4">

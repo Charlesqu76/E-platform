@@ -98,7 +98,6 @@ const ChatBottom = () => {
         isLoading: true,
       });
       await getAiData({
-        path: "normal",
         params: { id: "1", question: inputMessage },
         cb: (text: string, done: boolean) => {
           replaceMessage({

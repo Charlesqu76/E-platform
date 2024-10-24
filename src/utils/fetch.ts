@@ -23,7 +23,7 @@ const buildQueryParams = (params: Record<string, string>): string => {
 export const HOST =
   process.env.NODE_ENV === "production"
     ? "https://charlescrazy.fun/api/"
-    : "http://127.0.0.1:3002/api/";
+    : "http://127.0.0.1:3001/api/";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
@@ -60,7 +60,6 @@ const fetchUtility = async <T>(
 
   try {
     const response = await fetch(url, fetchOptions);
-
     if (!response.ok) {
       const errMsg = `${url} --->  ${response.status} ${response.statusText}`;
       if (!ctx) {
@@ -95,7 +94,7 @@ const stream = async ({
   params?: Record<string, string>;
   cb: (text: string, done: boolean) => void;
 }) => {
-  let url = AI_HOST + path;
+  let url = HOST + path;
   url += buildQueryParams(params || {});
   const fetchOptions: RequestInit = {
     method: "get",
@@ -103,18 +102,22 @@ const stream = async ({
     mode: "cors",
     credentials: "include",
   };
-  const response = fetch(url, fetchOptions);
-  const reader = (await response).body?.getReader();
-  if (!reader) return null;
-  const decoder = new TextDecoder();
-  let result = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    result += decoder.decode(value);
-    cb(result, done);
-    if (done) break;
+  try {
+    const response = fetch(url, fetchOptions);
+    const reader = (await response).body?.getReader();
+    if (!reader) return null;
+    const decoder = new TextDecoder();
+    let result = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      result += decoder.decode(value);
+      cb(result, done);
+      if (done) break;
+    }
+    return true;
+  } catch {
+    return null;
   }
-  return true;
 };
 
 export const get = async <T>(
