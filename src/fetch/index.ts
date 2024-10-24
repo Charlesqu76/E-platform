@@ -5,7 +5,7 @@ export const login = async (payload: {
   password: string;
   p: string;
 }) => {
-  const { data } = await myFetch.post("login", { ...payload, p: "/" });
+  const { data } = await myFetch.post("login", { ...payload });
   return data;
 };
 
