@@ -46,7 +46,7 @@ const fetchUtility = async <T>(
   const fetchOptions: RequestInit = {
     method: method,
     headers: { ...defaultHeaders, ...options.headers },
-    mode: "cors",
+    mode: "no-cors",
     credentials: "include",
   };
 
@@ -57,6 +57,8 @@ const fetchUtility = async <T>(
   if (method === "POST" && body) {
     fetchOptions.body = JSON.stringify(body);
   }
+
+  console.info("fetchOptions: ", fetchOptions);
 
   try {
     const response = await fetch(url, fetchOptions);
@@ -80,11 +82,6 @@ const fetchUtility = async <T>(
   }
 };
 
-export const AI_HOST =
-  process.env.NODE_ENV === "production"
-    ? "https://charlescrazy.fun/ai/"
-    : "http://127.0.0.1:3002/ai/";
-
 const stream = async ({
   path,
   params,
@@ -96,12 +93,14 @@ const stream = async ({
 }) => {
   let url = HOST + path;
   url += buildQueryParams(params || {});
+
   const fetchOptions: RequestInit = {
     method: "get",
-    headers: defaultHeaders,
     mode: "cors",
     credentials: "include",
   };
+
+  console.log(fetchOptions);
   try {
     const response = fetch(url, fetchOptions);
     const reader = (await response).body?.getReader();

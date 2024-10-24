@@ -111,14 +111,16 @@ const EditProduct = () => {
           </Button>
         </Item>
       </Form>
-      <div>
-        <h3 className="font-bold">References</h3>
-        <div className="flex flex-col">
-          {option?.references.map((v) => (
-            <a href={v}>{v}</a>
-          ))}
+      {option?.references && (
+        <div>
+          <h3 className="font-bold">References</h3>
+          <div className="flex flex-col">
+            {option?.references?.map((v) => (
+              <a href={v}>{v}</a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </Drawer>
   );
 };
