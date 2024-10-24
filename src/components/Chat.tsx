@@ -2,7 +2,6 @@ import { Button, Input } from "antd";
 import React, { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
 import { useRetailer } from "@/store/r";
-import { funcMap } from "@/const/retail";
 import Sales from "./sales";
 import { getAiData } from "@/fetch/retailer";
 
@@ -47,15 +46,13 @@ const ChatInterface = () => {
         className="flex-1 overflow-y-auto p-4 space-y-4 transition-all"
         ref={messagesRef}
       >
-        {messages.map(({ isAi, content, component, isLoading }, index) => (
+        {messages.map(({ isAi, content, isLoading }, index) => (
           <div
             key={index}
             className={`flex ${isAi ? "justify-start" : "justify-end"}`}
           >
             <div
-              className={`${
-                component ? "w-[80%]" : "max-w-[80%]"
-              } rounded-lg p-4 ${
+              className={`rounded-lg p-4 ${
                 isAi ? "bg-gray-100 text-gray-800" : "bg-blue-500 text-white"
               }`}
             >
@@ -63,8 +60,23 @@ const ChatInterface = () => {
                 <LoadingIndicator />
               ) : (
                 <>
-                  {component && component}
-                  {content && <Markdown>{content}</Markdown>}
+                  {content && (
+                    <Markdown
+                      components={{
+                        code: ({ children, node }) => {
+                          try {
+                            const jData = JSON.parse(children as string);
+                            const { predicts = [] } = jData || {};
+                            return <Sales data={predicts} />;
+                          } catch {
+                            return <code>{children}</code>;
+                          }
+                        },
+                      }}
+                    >
+                      {content}
+                    </Markdown>
+                  )}
                 </>
               )}
             </div>
@@ -105,19 +117,6 @@ const ChatBottom = () => {
             isAi: true,
             content: text,
           });
-          if (!done) return;
-          if (!text.startsWith("```json")) return;
-          try {
-            const jData = JSON.parse(
-              text.replace("```json", "").replace("```", "")
-            );
-            jData["predicts"] &&
-              replaceMessage({
-                role: "AI Agent",
-                isAi: true,
-                component: <Sales data={jData["predicts"]} />,
-              });
-          } catch {}
         },
       });
     } finally {
@@ -126,38 +125,24 @@ const ChatBottom = () => {
   };
 
   return (
-    <>
-      <div className="flex flex-wrap pt-1">
-        {/* {funcMap.map(({ name, hide, path, formatFun }) => {
-          if (hide) return <></>;
-          return (
-            <div key={name} className="mb-1 mr-1">
-              <Button size="small" onClick={() => click(name, path, formatFun)}>
-                {name}
-              </Button>
-            </div>
-          );
-        })} */}
+    <div className="border-t p-1 bg-white">
+      <div className="flex space-x-4 items-center">
+        <Input
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          placeholder="Type your message..."
+          className="flex-1 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+        />
+        <Button
+          type="primary"
+          disabled={loading || !inputMessage?.trim()}
+          loading={loading}
+          onClick={clickSend}
+        >
+          Send
+        </Button>
       </div>
-      <div className="border-t p-1 bg-white">
-        <div className="flex space-x-4 items-center">
-          <Input
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
-          />
-          <Button
-            type="primary"
-            disabled={loading || !inputMessage?.trim()}
-            loading={loading}
-            onClick={clickSend}
-          >
-            Send
-          </Button>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

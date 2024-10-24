@@ -10,14 +10,15 @@ type FieldType = {
 
 interface IProps {
   successCb: () => void;
+  p: string;
 }
 
-const LoginComponent = ({ successCb }: IProps) => {
+const LoginComponent = ({ successCb, p }: IProps) => {
   const [loading, setLoading] = useState(false);
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       setLoading(true);
-      if (await login(values)) {
+      if (await login({ ...values, p })) {
         successCb();
       } else {
       }

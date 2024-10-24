@@ -1,15 +1,16 @@
 import { NextRequest } from "next/server";
 import { getFirstPathSegment, verifyJwt } from "./utils";
-import { AUTH_COOKID, NEED_LOGIN } from "./const";
+import { AUTH_COOKID, NEED_LOGIN_PATH } from "./const";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const firstPath = getFirstPathSegment(pathname);
-  const jwt = request.cookies.get(AUTH_COOKID)?.value;
-  if (NEED_LOGIN.includes(firstPath) && !pathname.includes("login")) {
+  if (NEED_LOGIN_PATH.includes(pathname)) {
+    // console.log("asdfasdfasdf");
+    const jwt = request.cookies.get(AUTH_COOKID)?.value;
     const id = await verifyJwt(jwt);
     if (!id) {
+      const firstPath = getFirstPathSegment(pathname);
       return Response.redirect(
         new URL("/" + firstPath + "/login", request.url)
       );

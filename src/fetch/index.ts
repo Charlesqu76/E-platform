@@ -1,8 +1,11 @@
 import { myFetch } from "@/utils";
 
-export const login = async (payload: { email: string; password: string }) => {
+export const login = async (payload: {
+  email: string;
+  password: string;
+  p: string;
+}) => {
   const { data } = await myFetch.post("login", payload);
-  console.log(data);
   return data;
 };
 

@@ -46,7 +46,7 @@ const fetchUtility = async <T>(
   const fetchOptions: RequestInit = {
     method: method,
     headers: { ...defaultHeaders, ...options.headers },
-    mode: "no-cors",
+    mode: "cors",
     credentials: "include",
   };
 
@@ -57,8 +57,6 @@ const fetchUtility = async <T>(
   if (method === "POST" && body) {
     fetchOptions.body = JSON.stringify(body);
   }
-
-  console.info("fetchOptions: ", fetchOptions);
 
   try {
     const response = await fetch(url, fetchOptions);
@@ -100,7 +98,6 @@ const stream = async ({
     credentials: "include",
   };
 
-  console.log(fetchOptions);
   try {
     const response = fetch(url, fetchOptions);
     const reader = (await response).body?.getReader();

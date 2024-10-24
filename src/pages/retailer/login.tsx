@@ -3,8 +3,9 @@ import LoginComponent from "@/components/Login";
 const Login = () => {
   return (
     <LoginComponent
+      p="/retailer"
       successCb={() => {
-        window.location.href = "/retailer";
+        window.location.reload();
       }}
     />
   );

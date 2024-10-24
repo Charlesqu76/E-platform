@@ -74,7 +74,7 @@ const RetailerLayout = ({ pathname, children }: IProps) => {
             )}
 
             <Content className="pt-0 px-4 min-h-32">
-              <AISupport />
+              {userInfo && <AISupport />}
               {children}
             </Content>
           </Layout>
