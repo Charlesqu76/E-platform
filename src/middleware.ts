@@ -1,15 +1,17 @@
 import { NextRequest } from "next/server";
 import { getFirstPathSegment, verifyJwt } from "./utils";
-import { AUTH_COOKID, NEED_LOGIN_PATH } from "./const";
+import { NEED_LOGIN_PATH, AUTH_MAP } from "./const";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const firstPath = getFirstPathSegment(pathname);
+
   if (NEED_LOGIN_PATH.includes(pathname)) {
-    const jwt = request.cookies.get(AUTH_COOKID)?.value;
+    const token = AUTH_MAP[firstPath as keyof typeof AUTH_MAP];
+    const jwt = request.cookies.get(token)?.value;
     const id = await verifyJwt(jwt);
     if (!id) {
-      const firstPath = getFirstPathSegment(pathname);
       return Response.redirect(
         new URL("/" + firstPath + "/login", request.url)
       );

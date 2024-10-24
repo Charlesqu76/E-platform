@@ -1,7 +1,5 @@
-import { AUTH_COOKID } from "@/const";
 import { myFetch } from "./fetch";
 import * as jose from "jose";
-import Cookies from "js-cookie";
 import { logout } from "@/fetch";
 
 export { myFetch };
