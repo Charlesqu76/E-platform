@@ -1,13 +1,18 @@
 use crate::{
     constant::AUTH_,
     model::user::{GetUserInfo, LoginInfo, UserInfo},
-    util::create_jwt,
+    util::{create_jwt, get_token_key},
 };
 use actix_web::{cookie::Cookie, get, post, web, HttpRequest, HttpResponse, Responder};
 use sqlx::PgPool;
 
 #[post("login")]
-pub async fn login(pool: web::Data<PgPool>, login_info: web::Json<LoginInfo>) -> impl Responder {
+pub async fn login(
+    pool: web::Data<PgPool>,
+    login_info: web::Json<LoginInfo>,
+    req: HttpRequest,
+) -> impl Responder {
+    let path = req.path();
     let result = sqlx::query_as::<_, UserInfo>(
         "SELECT * 
         FROM retailer 
@@ -21,9 +26,9 @@ pub async fn login(pool: web::Data<PgPool>, login_info: web::Json<LoginInfo>) ->
     match result {
         Ok(user_info) => {
             let jwt: String = create_jwt(user_info.id, &user_info.email, &user_info.name);
-            let cookie = Cookie::build(AUTH_, jwt)
+            let token_key = get_token_key(login_info.p.clone());
+            let cookie = Cookie::build(token_key, jwt)
                 .path(login_info.p.clone())
-                .http_only(true)
                 .finish();
 
             println!("{}", cookie);
@@ -33,19 +38,19 @@ pub async fn login(pool: web::Data<PgPool>, login_info: web::Json<LoginInfo>) ->
     }
 }
 
-#[post("logout")]
-pub async fn logout(req: HttpRequest) -> impl Responder {
-    if let Some(original_cookie) = req.cookie(AUTH_) {
-        let cookie = Cookie::build(AUTH_, "")
-            .path(original_cookie.path().unwrap_or("/"))
-            .domain(original_cookie.domain().unwrap_or(""))
-            .finish();
+// #[post("logout")]
+// pub async fn logout(req: HttpRequest) -> impl Responder {
+//     if let Some(original_cookie) = req.cookie(AUTH_) {
+//         let cookie = Cookie::build(AUTH_, "")
+//             .path(original_cookie.path().unwrap_or("/"))
+//             .domain(original_cookie.domain().unwrap_or(""))
+//             .finish();
 
-        return HttpResponse::Ok().cookie(cookie).body("Cookie deleted");
-    }
+//         return HttpResponse::Ok().cookie(cookie).body("Cookie deleted");
+//     }
 
-    HttpResponse::Ok().body("Cookie not found")
-}
+//     HttpResponse::Ok().body("Cookie not found")
+// }
 
 #[get("userinfo")]
 async fn get_user_info(pool: web::Data<PgPool>, params: web::Json<GetUserInfo>) -> impl Responder {

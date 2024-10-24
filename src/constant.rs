@@ -1,4 +1,6 @@
 pub const AUTH_: &str = "auth-token";
+pub const EP_AUTH: &str = "ep_auth_token";
+pub const RETAILER_AUTH: &str = "retailer_auth_token";
 
 pub const HOST: &str = "https://charlescrazy.fun/ai/";
 

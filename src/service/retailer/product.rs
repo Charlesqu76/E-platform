@@ -1,7 +1,6 @@
 use crate::{
-    constant::AUTH_,
     model::retailer::{AddProductInfo, ModifyProductInfo, ProductInfo},
-    util::{decode_jwt, get_id},
+    util::get_id,
 };
 use actix_web::{
     get, post,
@@ -12,13 +11,7 @@ use sqlx::PgPool;
 
 #[get("")]
 pub async fn products(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let auth_cookie = req
-        .cookie(AUTH_)
-        .unwrap()
-        .value()
-        .parse::<String>()
-        .unwrap();
-    let id = decode_jwt(&auth_cookie).unwrap().id;
+    let id = get_id(req);
     let result: Result<Vec<ProductInfo>, sqlx::Error> = sqlx::query_as::<_, ProductInfo>(
         "SELECT p.*, CAST(AVG(pur.rate) AS FLOAT) AS ratings
                 FROM product AS p

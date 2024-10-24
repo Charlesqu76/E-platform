@@ -1,7 +1,6 @@
 use crate::{
-    constant::AUTH_,
     model::retailer::SalesInfo,
-    util::{decode_jwt, retailer::categorize_data},
+    util::{get_id, retailer::categorize_data},
 };
 use actix_web::{
     get,
@@ -13,13 +12,7 @@ use sqlx::PgPool;
 
 #[get("hostory")]
 pub async fn sales_history(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let auth_cookie: String = req
-        .cookie(AUTH_)
-        .unwrap()
-        .value()
-        .parse::<String>()
-        .unwrap();
-    let id = decode_jwt(&auth_cookie).unwrap().id;
+    let id = get_id(req);
 
     let results = sqlx::query_as::<_, SalesInfo>(
         "SELECT * 

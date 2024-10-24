@@ -1,7 +1,7 @@
 pub mod retailer;
 
 use crate::{
-    constant::{AUTH_, HOST},
+    constant::{EP_AUTH, HOST, RETAILER_AUTH},
     model::{Claims, Claimss},
 };
 use actix_web::{web::Bytes, HttpRequest};
@@ -51,9 +51,31 @@ pub fn convert_reqwest_stream(
     Box::pin(stream)
 }
 
+pub fn get_token_key(p: String) -> String {
+    if p == "ep" {
+        EP_AUTH.to_owned()
+    } else if p == "retailer" {
+        RETAILER_AUTH.to_owned()
+    } else {
+        panic!("can't find token key");
+    }
+}
+
+pub fn get_second_path_segment(path: &str) -> &str {
+    let parts: Vec<&str> = path.split('/').filter(|&s| !s.is_empty()).collect();
+    if parts.len() >= 2 {
+        parts[1]
+    } else {
+        panic!("can not find the second path ")
+    }
+}
+
 pub fn get_id(req: HttpRequest) -> i32 {
+    let path = req.path();
+    let p = get_second_path_segment(path);
+    let token_key = get_token_key(p.to_string());
     let auth_cookie = req
-        .cookie(AUTH_)
+        .cookie(&token_key)
         .expect("can not find auth token")
         .value()
         .parse::<String>()
