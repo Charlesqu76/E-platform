@@ -95,7 +95,7 @@ const stream = async ({
   params?: Record<string, string>;
   cb: (text: string, done: boolean) => void;
 }) => {
-  let url = HOST + path;
+  let url = MY_PATH + path;
   url += buildQueryParams(params || {});
 
   const fetchOptions: RequestInit = {
