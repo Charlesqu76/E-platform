@@ -17,3 +17,8 @@ pub struct Claimss {
     pub email: String,
     pub name: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FileReturn {
+    pub filepath: String,
+}

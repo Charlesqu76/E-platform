@@ -1,4 +1,5 @@
 use actix_cors::Cors;
+use actix_files::Files;
 use actix_web::{
     middleware::Logger,
     web::{scope, Data},
@@ -7,6 +8,7 @@ use actix_web::{
 use dotenv::dotenv;
 use env_logger::Env;
 use reqwest::Client;
+use service::upload::save_file;
 use sqlx::postgres::PgPoolOptions;
 use std::{env, sync::Arc};
 
@@ -39,8 +41,10 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .app_data(Data::new(pool.clone()))
             .app_data(Data::new(client.clone()))
+            .service(Files::new("/uploads", "./uploads").show_files_listing())
             .service(
                 scope("/api")
+                    .service(save_file)
                     .configure(retailer::config)
                     .configure(user::config)
                     .configure(product::config),

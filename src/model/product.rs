@@ -14,6 +14,7 @@ pub struct ProductInfo {
 
 pub struct ProductQuery {
     pub q: Option<String>,
+    pub file: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -50,6 +51,7 @@ pub struct ProductComment {
 #[derive(Deserialize, Debug)]
 pub struct QueryProducts {
     pub q: Option<String>,
+    pub file: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]

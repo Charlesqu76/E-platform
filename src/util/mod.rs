@@ -8,7 +8,7 @@ use actix_web::{web::Bytes, HttpRequest};
 use futures::Stream;
 use jsonwebtoken::{decode, encode, errors::Error, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Response;
-use std::pin::Pin;
+use std::{fs, pin::Pin};
 
 pub fn create_jwt(id: i32, email: &str, name: &str) -> String {
     let claims = Claims { id, email, name };
@@ -60,4 +60,13 @@ pub fn get_id(req: HttpRequest) -> i32 {
         .unwrap();
     let id: i32 = decode_jwt(&auth_cookie).expect("parse token erro").id;
     id
+}
+
+pub fn create(directory: &String) {
+    if !fs::metadata(directory).is_ok() {
+        fs::create_dir(&directory.clone());
+        println!("Directory created: {}", directory);
+    } else {
+        println!("Directory already exists: {}", directory);
+    }
 }

@@ -15,7 +15,10 @@ pub async fn products(
     client: web::Data<Arc<Client>>,
     query: web::Query<QueryProducts>,
 ) -> impl Responder {
-    let q = ProductQuery { q: query.q.clone() };
+    let q = ProductQuery {
+        q: query.q.clone(),
+        file: query.file.clone(),
+    };
 
     let res: Vec<ProductInfo> = client
         .get(format_url("recommend"))
