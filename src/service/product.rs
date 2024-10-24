@@ -45,7 +45,7 @@ pub async fn detail(pool: web::Data<PgPool>, query: web::Query<QueryDetail>) -> 
 
     match results {
         Ok(results) => HttpResponse::Ok().json(results),
-        Err(err) => HttpResponse::InternalServerError().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -63,7 +63,7 @@ pub async fn comments(pool: web::Data<PgPool>, query: web::Query<QueryDetail>) -
 
     match results {
         Ok(results) => HttpResponse::Ok().json(results),
-        Err(err) => HttpResponse::InternalServerError().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
 

@@ -1,7 +1,6 @@
 use crate::{
-    constant::AUTH_,
     model::retailer::{Device, Gender, Geo, Purchase},
-    util::{decode_jwt, get_id, retailer::categorize_time_data},
+    util::{get_id, retailer::categorize_time_data},
 };
 use actix_web::{
     get,

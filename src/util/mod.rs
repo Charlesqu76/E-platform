@@ -1,7 +1,7 @@
 pub mod retailer;
 
 use crate::{
-    constant::AUTH_,
+    constant::{AUTH_, HOST},
     model::{Claims, Claimss},
 };
 use actix_web::{web::Bytes, HttpRequest};
@@ -32,9 +32,6 @@ pub fn decode_jwt(jwt: &str) -> Result<Claimss, Error> {
     let token_data = decode::<Claimss>(jwt, &decoding_key, &validation)?;
     Ok(token_data.claims)
 }
-
-pub const HOST: &str = "https://charlescrazy.fun/ai/";
-// pub const HOST: &str = "http://127.0.0.1:3002/ai/";
 
 pub fn format_url(path: &str) -> String {
     format!("{}{}", HOST, path)

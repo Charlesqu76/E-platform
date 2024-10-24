@@ -33,7 +33,7 @@ pub async fn products(pool: web::Data<PgPool>, req: HttpRequest) -> impl Respond
 
     match result {
         Ok(products) => HttpResponse::Ok().json(products),
-        Err(e) => HttpResponse::InternalServerError().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -59,8 +59,8 @@ pub async fn add_product(
     .await;
 
     match result {
-        Ok(row) => HttpResponse::Ok().json({}),
-        Err(e) => HttpResponse::InternalServerError().finish(),
+        Ok(_) => HttpResponse::Ok().json({}),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -91,7 +91,7 @@ pub async fn modify_product(
     .await;
 
     match result {
-        Ok(row) => HttpResponse::Ok().json({}),
-        Err(e) => HttpResponse::InternalServerError().finish(),
+        Ok(_) => HttpResponse::Ok().json({}),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }

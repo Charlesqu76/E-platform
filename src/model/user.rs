@@ -19,6 +19,7 @@ pub struct UserInfo {
 pub struct LoginInfo {
     pub email: String,
     pub password: String,
+    pub p: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

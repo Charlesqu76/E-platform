@@ -36,6 +36,6 @@ pub async fn sales_history(pool: web::Data<PgPool>, req: HttpRequest) -> impl Re
             let res = categorize_data(&results);
             HttpResponse::Ok().json(json!(res.ok().unwrap()))
         }
-        Err(err) => HttpResponse::InternalServerError().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
