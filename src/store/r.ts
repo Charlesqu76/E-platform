@@ -1,3 +1,4 @@
+import { generateUUID } from "@/utils";
 import { createContext, ReactElement, useContext } from "react";
 import { useStore } from "zustand";
 import { createStore } from "zustand/vanilla";
@@ -11,6 +12,7 @@ type TMessage = {
 };
 
 export interface IStore {
+  chatId: string;
   loading: boolean;
   open: boolean;
   messages: TMessage[];
@@ -24,6 +26,7 @@ export interface IStore {
 export type storeApi = ReturnType<typeof init>;
 
 const defaultVal = {
+  chatId: generateUUID(),
   loading: false,
   open: false,
   messages: [],

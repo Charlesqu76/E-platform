@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { useRetailer } from "@/store/r";
 import Sales from "./sales";
 import { getAiData } from "@/fetch/retailer";
+import { useCommonStore } from "@/store";
 
 const LoadingIndicator = () => (
   <div className="flex justify-start ">
@@ -18,7 +19,7 @@ const LoadingIndicator = () => (
 );
 
 const ChatInterface = () => {
-  const { loading, messages, open } = useRetailer((state) => state);
+  const { loading, messages, open, chatId } = useRetailer((state) => state);
   const messagesRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
@@ -96,7 +97,9 @@ const ChatBottom = () => {
     setMessages,
     replaceMessage,
     setLoading,
+    chatId,
   } = useRetailer((state) => state);
+  const { userInfo } = useCommonStore((state) => state);
 
   const clickSend = async () => {
     if (!inputMessage.trim()) return;
@@ -110,7 +113,11 @@ const ChatBottom = () => {
         isLoading: true,
       });
       await getAiData({
-        params: { id: "1", question: inputMessage },
+        params: {
+          chatId: chatId,
+          id: (userInfo?.id || 1).toString(),
+          question: inputMessage,
+        },
         cb: (text: string, done: boolean) => {
           replaceMessage({
             role: "AI Agent",
