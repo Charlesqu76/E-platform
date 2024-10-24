@@ -77,12 +77,14 @@ pub struct Geo {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NormalQuery {
     pub question: String,
+    pub chatId: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NormalSend {
     pub id: String,
     pub question: String,
+    pub chatId: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

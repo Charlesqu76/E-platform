@@ -25,6 +25,7 @@ pub async fn normal(
     let q = NormalSend {
         id: id.to_string(),
         question: query.question.clone(),
+        chatId: query.chatId.clone(),
     };
 
     let response = client
