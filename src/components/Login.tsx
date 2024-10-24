@@ -28,7 +28,7 @@ const LoginComponent = ({ successCb, p }: IProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center lg:mb-[50%]">
+    <div className="flex flex-col items-center mb-[50%]">
       <span className="text-[28px] font-bold mb-2">Log In</span>
       <Form
         className="w-72 p-2"

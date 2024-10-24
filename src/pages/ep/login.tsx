@@ -2,7 +2,7 @@ import LoginComponent from "@/components/Login";
 
 const Login = () => {
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-screen flex justify-center">
       <LoginComponent
         p="ep"
         successCb={() => {
