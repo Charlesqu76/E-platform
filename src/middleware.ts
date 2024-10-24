@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (NEED_LOGIN_PATH.includes(pathname)) {
-    // console.log("asdfasdfasdf");
     const jwt = request.cookies.get(AUTH_COOKID)?.value;
     const id = await verifyJwt(jwt);
     if (!id) {
