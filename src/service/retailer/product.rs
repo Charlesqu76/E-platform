@@ -1,20 +1,13 @@
-use std::sync::Arc;
-
 use crate::{
     constant::AUTH_,
-    model::{
-        product::QueryDetail,
-        retailer::{AISearch, AISearchQuery, AddProductInfo, ModifyProductInfo, ProductInfo},
-    },
-    util::{decode_jwt, format_url},
+    model::retailer::{AddProductInfo, ModifyProductInfo, ProductInfo},
+    util::{decode_jwt, get_id},
 };
 use actix_web::{
     get, post,
     web::{self},
     HttpRequest, HttpResponse, Responder,
 };
-use reqwest::Client;
-use serde_json::json;
 use sqlx::PgPool;
 
 #[get("")]
@@ -39,14 +32,8 @@ pub async fn products(pool: web::Data<PgPool>, req: HttpRequest) -> impl Respond
     .await;
 
     match result {
-        Ok(products) => {
-            println!("{:?}", products);
-            HttpResponse::Ok().json(products)
-        }
-        Err(e) => {
-            println!("{:?}", e);
-            HttpResponse::InternalServerError().finish()
-        }
+        Ok(products) => HttpResponse::Ok().json(products),
+        Err(e) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -56,13 +43,8 @@ pub async fn add_product(
     req: HttpRequest,
     data: web::Json<AddProductInfo>,
 ) -> impl Responder {
-    let auth_cookie = req
-        .cookie(AUTH_)
-        .unwrap()
-        .value()
-        .parse::<String>()
-        .unwrap();
-    let id = decode_jwt(&auth_cookie).unwrap().id;
+    let id: i32 = get_id(req);
+
     let result = sqlx::query(
         "INSERT INTO product (name, description, price,  quantity, retailer)
                 VALUES ($1, $2, $3, $4, $5)
@@ -77,14 +59,8 @@ pub async fn add_product(
     .await;
 
     match result {
-        Ok(row) => {
-            println!("{:?}", row);
-            HttpResponse::Ok().json({})
-        }
-        Err(e) => {
-            println!("{:?}", e);
-            HttpResponse::InternalServerError().finish()
-        }
+        Ok(row) => HttpResponse::Ok().json({}),
+        Err(e) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -94,13 +70,8 @@ pub async fn modify_product(
     req: HttpRequest,
     data: web::Json<ModifyProductInfo>,
 ) -> impl Responder {
-    let auth_cookie = req
-        .cookie(AUTH_)
-        .unwrap()
-        .value()
-        .parse::<String>()
-        .unwrap();
-    let id = decode_jwt(&auth_cookie).unwrap().id;
+    let id: i32 = get_id(req);
+
     let result = sqlx::query(
         "UPDATE product
                 SET name = $1,
@@ -120,35 +91,7 @@ pub async fn modify_product(
     .await;
 
     match result {
-        Ok(row) => {
-            println!("{:?}", row);
-            HttpResponse::Ok().json({})
-        }
-        Err(e) => {
-            println!("{:?}", e);
-            HttpResponse::InternalServerError().finish()
-        }
-    }
-}
-
-#[get("aisearch")]
-pub async fn aisearch(
-    client: web::Data<Arc<Client>>,
-    query: web::Query<AISearchQuery>,
-) -> impl Responder {
-    let q = AISearchQuery {
-        name: query.name.clone(),
-    };
-    let res = client
-        .get(format_url("aisearch"))
-        .query(&q)
-        .send()
-        .await
-        .unwrap();
-
-    let a = &res.json::<AISearch>().await;
-    match a {
-        Ok(r) => HttpResponse::Ok().json(r),
-        Err(_) => HttpResponse::Ok().json(json!({"content":1 })),
+        Ok(row) => HttpResponse::Ok().json({}),
+        Err(e) => HttpResponse::InternalServerError().finish(),
     }
 }

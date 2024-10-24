@@ -1,4 +1,3 @@
-use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 
 pub mod product;
@@ -10,7 +9,6 @@ pub struct Claims<'a> {
     pub id: i32,
     pub email: &'a str,
     pub name: &'a str,
-    // pub exp: NaiveDateTime,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

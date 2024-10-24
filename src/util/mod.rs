@@ -1,10 +1,15 @@
 mod response;
 pub mod retailer;
 
-use chrono::NaiveDateTime;
+use crate::{
+    constant::AUTH_,
+    model::{Claims, Claimss},
+};
+use actix_web::{web::Bytes, HttpRequest};
+use futures::Stream;
 use jsonwebtoken::{decode, encode, errors::Error, DecodingKey, EncodingKey, Header, Validation};
-
-use crate::model::{Claims, Claimss};
+use reqwest::Response;
+use std::pin::Pin;
 
 pub fn create_jwt(id: i32, email: &str, name: &str) -> String {
     let claims = Claims { id, email, name };
@@ -30,7 +35,33 @@ pub fn decode_jwt(jwt: &str) -> Result<Claimss, Error> {
 }
 
 pub const HOST: &str = "https://charlescrazy.fun/ai/";
+// pub const HOST: &str = "http://127.0.0.1:3002/ai/";
 
 pub fn format_url(path: &str) -> String {
     format!("{}{}", HOST, path)
+}
+
+pub fn convert_reqwest_stream(
+    response: Response,
+) -> Pin<Box<dyn Stream<Item = Result<Bytes, Box<dyn std::error::Error>>>>> {
+    // Create an async stream that yields chunks
+    let stream = futures::stream::try_unfold(response, |mut response| async move {
+        match response.chunk().await {
+            Ok(Some(chunk)) => Ok(Some((chunk, response))),
+            Ok(None) => Ok(None),
+            Err(e) => Err(Box::new(e) as Box<dyn std::error::Error>),
+        }
+    });
+    Box::pin(stream)
+}
+
+pub fn get_id(req: HttpRequest) -> i32 {
+    let auth_cookie = req
+        .cookie(AUTH_)
+        .expect("can not find auth token")
+        .value()
+        .parse::<String>()
+        .unwrap();
+    let id: i32 = decode_jwt(&auth_cookie).expect("parse token erro").id;
+    id
 }

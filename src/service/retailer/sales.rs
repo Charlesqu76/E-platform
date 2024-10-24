@@ -34,27 +34,8 @@ pub async fn sales_history(pool: web::Data<PgPool>, req: HttpRequest) -> impl Re
     match results {
         Ok(results) => {
             let res = categorize_data(&results);
-            println!("{:?}", res);
             HttpResponse::Ok().json(json!(res.ok().unwrap()))
         }
-        Err(err) => {
-            println!("{}", err);
-            HttpResponse::InternalServerError().finish()
-        }
+        Err(err) => HttpResponse::InternalServerError().finish(),
     }
-}
-
-#[get("prediction")]
-pub async fn sales_prediction(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    // let auth_cookie = req
-    //     .cookie(AUTH_)
-    //     .unwrap()
-    //     .value()
-    //     .parse::<String>()
-    //     .unwrap();
-    // let id = decode_jwt(&auth_cookie).unwrap().id;
-
-    let id = 1;
-
-    HttpResponse::Ok().json({})
 }

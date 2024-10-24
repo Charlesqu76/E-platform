@@ -6,18 +6,15 @@ use crate::{
     },
     util::format_url,
 };
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, web, HttpResponse, Responder};
 use reqwest::Client;
 use sqlx::PgPool;
 
 #[get("products")]
 pub async fn products(
-    pool: web::Data<PgPool>,
     client: web::Data<Arc<Client>>,
     query: web::Query<QueryProducts>,
 ) -> impl Responder {
-    let id = 1;
-
     let q = ProductQuery { q: query.q.clone() };
 
     let res: Vec<ProductInfo> = client
@@ -48,10 +45,7 @@ pub async fn detail(pool: web::Data<PgPool>, query: web::Query<QueryDetail>) -> 
 
     match results {
         Ok(results) => HttpResponse::Ok().json(results),
-        Err(err) => {
-            println!("{}", err);
-            HttpResponse::InternalServerError().finish()
-        }
+        Err(err) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -69,10 +63,7 @@ pub async fn comments(pool: web::Data<PgPool>, query: web::Query<QueryDetail>) -
 
     match results {
         Ok(results) => HttpResponse::Ok().json(results),
-        Err(err) => {
-            println!("{}", err);
-            HttpResponse::InternalServerError().finish()
-        }
+        Err(err) => HttpResponse::InternalServerError().finish(),
     }
 }
 

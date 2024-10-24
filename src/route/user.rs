@@ -24,15 +24,11 @@ async fn login(pool: web::Data<PgPool>, login_info: web::Json<LoginInfo>) -> imp
 
     match result {
         Ok(user_info) => {
-            println!("successful, {:?}", user_info);
             let jwt: String = create_jwt(user_info.id, &user_info.email, &user_info.name);
             let cookie = Cookie::build(AUTH_, jwt).http_only(true).path("/").finish();
             HttpResponse::Ok().cookie(cookie).json(user_info)
         }
-        Err(e) => {
-            println!("error is {:?}", e);
-            HttpResponse::InternalServerError().finish()
-        }
+        Err(e) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -62,13 +58,7 @@ async fn get_user_info(pool: web::Data<PgPool>, params: web::Json<GetUserInfo>) 
     .await;
 
     match result {
-        Ok(user_info) => {
-            println!("successful, {:?}", user_info);
-            HttpResponse::Ok().json(user_info)
-        }
-        Err(e) => {
-            println!("error is {:?}", e);
-            HttpResponse::InternalServerError().finish()
-        }
+        Ok(user_info) => HttpResponse::Ok().json(user_info),
+        Err(e) => HttpResponse::InternalServerError().finish(),
     }
 }

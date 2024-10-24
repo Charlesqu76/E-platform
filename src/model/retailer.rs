@@ -75,7 +75,19 @@ pub struct Geo {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct AISearchQuery {
+pub struct NormalQuery {
+    pub question: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct NormalSend {
+    pub id: String,
+    pub question: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+
+pub struct AIsearchQuery {
     pub name: String,
 }
 
