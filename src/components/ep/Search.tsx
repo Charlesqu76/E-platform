@@ -21,14 +21,14 @@ const Search = () => {
   };
   const suffix = (
     <div className="flex items-center">
-      <AiTwotoneAudio
+      {/* <AiTwotoneAudio
         className="text-2xl mr-2 hover:cursor-pointer"
         onClick={() => console.log(1)}
       />
       <AiFillPicture
         className="text-2xl mr-2 hover:cursor-pointer"
         onClick={() => console.log(2)}
-      />
+      /> */}
       <Button type="primary" onClick={clickSearch} loading={loading}>
         Search
       </Button>
