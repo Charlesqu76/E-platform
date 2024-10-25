@@ -2,11 +2,12 @@ use std::sync::Arc;
 
 use crate::{
     model::product::{
-        ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts, SummaryReturn,
+        BuyQuery, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
+        SummaryReturn, ViewQuery,
     },
-    util::format_url,
+    util::{format_url, get_id, get_token_key},
 };
-use actix_web::{get, web, HttpResponse, Responder};
+use actix_web::{get, post, web, HttpRequest, HttpResponse, Responder};
 use reqwest::Client;
 use sqlx::PgPool;
 
@@ -89,4 +90,53 @@ pub async fn summary(
         .unwrap();
 
     HttpResponse::Ok().json(res)
+}
+
+#[post("view")]
+pub async fn view(
+    pool: web::Data<PgPool>,
+    query: web::Json<ViewQuery>,
+    req: HttpRequest,
+) -> impl Responder {
+    let id: i32 = get_id(req);
+    let results = sqlx::query_as::<_, ProductComment>(
+        " INSERT INTO view (customer, product, geo, device) 
+        VALUES ($1, $2, $3, $4)",
+    )
+    .bind(id)
+    .bind(query.product_id)
+    .bind(query.geo.clone())
+    .bind(query.device.clone())
+    .fetch_all(pool.get_ref())
+    .await;
+
+    match results {
+        Ok(results) => HttpResponse::Ok().json({}),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
+#[post("buy")]
+pub async fn buy(
+    pool: web::Data<PgPool>,
+    query: web::Json<BuyQuery>,
+    req: HttpRequest,
+) -> impl Responder {
+    let id: i32 = get_id(req);
+    let results = sqlx::query_as::<_, ProductComment>(
+        " INSERT INTO purchase (customer, product, price ,geo, device) 
+        VALUES ($1, $2, $3, $4)",
+    )
+    .bind(id)
+    .bind(query.product_id)
+    .bind(query.price)
+    .bind(query.geo.clone())
+    .bind(query.device.clone())
+    .fetch_all(pool.get_ref())
+    .await;
+
+    match results {
+        Ok(results) => HttpResponse::Ok().json({}),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
 }

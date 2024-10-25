@@ -59,3 +59,18 @@ pub struct CommitSummary {
     comment: Option<String>,
     rate: Option<i32>,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ViewQuery {
+    pub product_id: i32,
+    pub geo: String,
+    pub device: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct BuyQuery {
+    pub product_id: i32,
+    pub price: f64,
+    pub geo: String,
+    pub device: String,
+}
