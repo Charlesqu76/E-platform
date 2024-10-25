@@ -47,7 +47,7 @@ const nextConfig = {
       "127.0.0.1",
       "localhost",
       "via.placeholder.com",
-      "http://charlescrazy.fun/",
+      "charlescrazy.fun",
     ],
   },
 };
