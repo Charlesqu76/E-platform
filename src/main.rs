@@ -41,9 +41,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .app_data(Data::new(pool.clone()))
             .app_data(Data::new(client.clone()))
-            .service(Files::new("/uploads", "./uploads").show_files_listing())
             .service(
                 scope("/api")
+                    .service(Files::new("/uploads", "./uploads").show_files_listing())
                     .service(save_file)
                     .configure(retailer::config)
                     .configure(user::config)
