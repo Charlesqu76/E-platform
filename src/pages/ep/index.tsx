@@ -3,14 +3,15 @@ import Search from "@/components/ep/Search";
 import { getProducts } from "@/fetch/product";
 import { Context, init, storeApi } from "@/store/products";
 import { TProduct } from "@/type/product";
+import { GetServerSidePropsContext } from "next";
 import { useRef } from "react";
 
 interface IProps {
   products: TProduct[];
 }
 
-export const getServerSideProps = async () => {
-  const products = await getProducts();
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const products = await getProducts({}, ctx);
   return {
     props: {
       products,

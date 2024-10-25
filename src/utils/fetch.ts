@@ -20,12 +20,10 @@ const buildQueryParams = (params: Record<string, string>): string => {
   return queryString ? `?${queryString}` : "";
 };
 
-// export const HOST =
-//   process.env.NODE_ENV === "production"
-//     ? "https://charlescrazy.fun/"
-//     : "http://127.0.0.1:3001/";
-
-export const HOST = "http://127.0.0.1:3001/";
+export const HOST =
+  process.env.NODE_ENV === "production"
+    ? "https://charlescrazy.fun/"
+    : "http://127.0.0.1:3001/";
 
 const prefix = "api/";
 

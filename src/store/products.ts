@@ -35,11 +35,7 @@ export const init = (props: Partial<typeof defaultVal>) => {
       set({ searchText: payload });
     },
     setSearchImg: (payload) => {
-      let url = "";
-      if (payload) {
-        url = new URL(payload, HOST).toString();
-      }
-      return set({ searchImg: url });
+      return set({ searchImg: payload });
     },
   }));
 };

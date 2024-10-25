@@ -1,8 +1,12 @@
 import { TComment, TProduct, TProductDetail } from "@/type/product";
 import { getDevice, getGeo, myFetch } from "@/utils";
+import { GetServerSidePropsContext } from "next";
 
-export const getProducts = async (payload?: { q: string; file: string }) => {
-  const { data } = await myFetch.get<TProduct[]>("ep/products", payload);
+export const getProducts = async (
+  payload?: { q?: string; file?: string },
+  ctx?: GetServerSidePropsContext
+) => {
+  const { data } = await myFetch.get<TProduct[]>("ep/products", payload, ctx);
   return data || [];
 };
 
