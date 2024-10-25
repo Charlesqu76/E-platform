@@ -15,6 +15,7 @@ pub struct ProductInfo {
 pub struct ProductQuery {
     pub q: Option<String>,
     pub file: Option<String>,
+    pub id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

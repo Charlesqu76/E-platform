@@ -5,7 +5,7 @@ use crate::{
         BuyQuery, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
         SummaryReturn, ViewQuery,
     },
-    util::{format_url, get_id, get_token_key},
+    util::{decode_jwt, format_url, get_id, get_second_path_segment, get_token_key},
 };
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Responder};
 use reqwest::Client;
@@ -15,10 +15,25 @@ use sqlx::PgPool;
 pub async fn products(
     client: web::Data<Arc<Client>>,
     query: web::Query<QueryProducts>,
+    req: HttpRequest,
 ) -> impl Responder {
+    let path = req.path();
+    let p = get_second_path_segment(path);
+    let token_key = get_token_key(p.to_string());
+    let auth_cookie = req.cookie(&token_key);
+    let mut id = None;
+    match auth_cookie {
+        Some(cookie) => {
+            let c = cookie.value().parse::<String>().unwrap();
+            id = Some(decode_jwt(&c).expect("parse token erro").id.to_string());
+        }
+        None => {}
+    }
+
     let q = ProductQuery {
         q: query.q.clone(),
         file: query.file.clone(),
+        id,
     };
 
     let res: Vec<ProductInfo> = client
