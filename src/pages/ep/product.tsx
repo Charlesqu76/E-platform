@@ -1,7 +1,8 @@
 import ProductDetail from "@/components/ep/ProductDetail";
-import { getComments, getProductDetail } from "@/fetch/product";
+import { getComments, getProductDetail, view } from "@/fetch/product";
 import { TComment, TProductDetail } from "@/type/product";
 import { GetServerSidePropsContext } from "next";
+import { useEffect } from "react";
 
 interface IProps {
   detail: TProductDetail;
@@ -27,6 +28,9 @@ export const getServerSideProps = async ({
 };
 
 const Product = ({ detail, id, comments }: IProps) => {
+  useEffect(() => {
+    view({ product_id: Number(id) });
+  }, []);
   return <ProductDetail {...detail} comments={comments} id={id} />;
 };
 

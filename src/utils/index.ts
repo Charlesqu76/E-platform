@@ -77,3 +77,18 @@ export const generateUUID = () => {
     return v.toString(16);
   });
 };
+
+export const pickRandomElement = (array: string[]): string => {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+};
+
+export const getGeo = () => {
+  const geo = ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "ACT", "NT"];
+  return pickRandomElement(geo);
+};
+
+export const getDevice = () => {
+  const device = ["PHONE", "LAPTOP"];
+  return pickRandomElement(device);
+};
