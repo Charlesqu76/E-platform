@@ -17,7 +17,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          # key: ${{ secrets.KEY }}
           port: ${{ secrets.SERVER_PORT }}
           source: "./*" # 你要上传的文件或目录
           target: "/home/ubuntu/platform/" # 目标目录
@@ -27,7 +28,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          # key: ${{ secrets.KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /home/ubuntu/platform
