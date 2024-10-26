@@ -145,7 +145,7 @@ pub async fn buy(
     let id: i32 = get_id(&req);
     let results = sqlx::query_as::<_, ProductComment>(
         " INSERT INTO purchase (customer, product, price ,geo, device) 
-        VALUES ($1, $2, $3, $4)",
+        VALUES ($1, $2, $3, $4, $5)",
     )
     .bind(id)
     .bind(query.product_id)
@@ -157,6 +157,9 @@ pub async fn buy(
 
     match results {
         Ok(results) => HttpResponse::Ok().json({}),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Err(err) => {
+            println!("{:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
     }
 }
