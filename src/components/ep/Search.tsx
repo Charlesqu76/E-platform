@@ -39,10 +39,8 @@ const Search = () => {
     </div>
   );
 
-  console.log(searchImg);
-
   return (
-    <div className="w-full max-w-[800px] ">
+    <div className="w-full max-w-[800px] relative ">
       <Input
         className="border-gray-200 border-2"
         placeholder="input search text"
@@ -52,13 +50,19 @@ const Search = () => {
         onChange={changeText}
       />
       {searchImg && (
-        <Image
-          className="p-1 rounded-sm"
-          src={searchImg}
-          height={200}
-          width={200}
-          alt="search image"
-        />
+        <div
+          className={`absolute right-0 overflow-hidden  z-40 transition-all duration-3000 ${
+            searchImg ? "max-h-48" : "max-h-0"
+          } overflow-hidden`}
+        >
+          <Image
+            className={`p-1 rounded-sm`}
+            src={searchImg}
+            height={200}
+            width={200}
+            alt="search image"
+          />
+        </div>
       )}
     </div>
   );

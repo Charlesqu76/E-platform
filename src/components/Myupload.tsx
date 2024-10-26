@@ -1,4 +1,5 @@
-import { Upload } from "antd";
+import { Button, Upload } from "antd";
+import { useState } from "react";
 import { AiFillPicture } from "react-icons/ai";
 
 interface IProps {
@@ -9,10 +10,14 @@ const HOST = "https://charlescrazy.fun/";
 const PATH = "api/";
 
 const MyUpload = ({ successCb }: IProps) => {
+  const [loading, setLoading] = useState(false);
   const handleChange = (info: any) => {
+    if (info.file.status === "uploading") {
+      setLoading(true);
+    }
     if (info.file.status === "done") {
       const { filepath } = info.file.response;
-
+      setLoading(false);
       successCb?.(new URL(filepath, HOST).toString());
     }
   };
@@ -24,7 +29,11 @@ const MyUpload = ({ successCb }: IProps) => {
       onChange={handleChange}
       showUploadList={false}
     >
-      <AiFillPicture className="text-2xl mr-2 hover:cursor-pointer" />
+      <Button
+        loading={loading}
+        type="text"
+        icon={<AiFillPicture className="text-2xl mr-2 hover:cursor-pointer" />}
+      ></Button>
     </Upload>
   );
 };
