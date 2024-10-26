@@ -1,5 +1,4 @@
 use actix_cors::Cors;
-use actix_files::Files;
 use actix_web::{
     middleware::Logger,
     web::{scope, Data},
