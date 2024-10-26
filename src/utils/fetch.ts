@@ -25,6 +25,8 @@ export const HOST =
     ? "https://charlescrazy.fun/"
     : "http://127.0.0.1:3001/";
 
+// const HOST = "https://charlescrazy.fun/";
+
 const prefix = "api/";
 
 export const MY_PATH = HOST + prefix;

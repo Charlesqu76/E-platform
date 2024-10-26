@@ -28,7 +28,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
   id,
 }) => {
   return (
-    <div className=" max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className=" max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mb-12">
       <div className="flex justify-center">
         <div className="relative h-96 w-full">
           <Image
