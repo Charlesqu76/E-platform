@@ -15,6 +15,9 @@ const MyUpload = ({ successCb }: IProps) => {
     if (info.file.status === "uploading") {
       setLoading(true);
     }
+    if (info.file.status !== "uploading") {
+      setLoading(false);
+    }
     if (info.file.status === "done") {
       const { filepath } = info.file.response;
       setLoading(false);
