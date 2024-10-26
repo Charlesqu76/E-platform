@@ -6,7 +6,7 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  images: string[];
+  image: string;
   price: number;
   retailer: string;
   ratings: number;
@@ -24,7 +24,7 @@ const ProductList: React.FC<ProductListProps> = () => {
           {...product}
           name={product.name}
           description={product.description}
-          images={product.images}
+          image={product.image}
           price={product.price}
           retailer={product.retailer}
           ratings={product.ratings}

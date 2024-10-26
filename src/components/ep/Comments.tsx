@@ -15,6 +15,7 @@ interface IProps {
 const Comments = ({ comments, id }: IProps) => {
   const [loading, setLoading] = useState(false);
   const [summary, SetSummary] = useState("");
+  if (!comments?.length) return <></>;
   const clickSummary = async () => {
     try {
       setLoading(true);

@@ -7,7 +7,7 @@ interface IProps {
   id: number;
   name: string;
   description: string;
-  images: string[];
+  image: string;
   price: number;
   retailer: string;
   ratings: number;
@@ -16,7 +16,7 @@ const Product = ({
   id,
   name,
   description,
-  images,
+  image,
   price,
   retailer,
   ratings,
@@ -27,10 +27,10 @@ const Product = ({
         <div className="flex justify-center">
           <div className="relative h-48 w-full">
             <Image
-              src={images?.[0] || DEFAULT_PIC}
+              src={image || DEFAULT_PIC}
               alt={name}
               fill
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "contain" }}
             />
           </div>
         </div>
