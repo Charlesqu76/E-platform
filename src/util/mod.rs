@@ -4,7 +4,7 @@ use crate::{
     constant::{EP_AUTH, HOST, RETAILER_AUTH},
     model::{Claims, Claimss},
 };
-use actix_web::{web::Bytes, HttpRequest};
+use actix_web::{cookie::Cookie, web::Bytes, HttpRequest};
 use futures::Stream;
 use jsonwebtoken::{decode, encode, errors::Error, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Response;
@@ -70,12 +70,9 @@ pub fn get_second_path_segment(path: &str) -> &str {
     }
 }
 
-pub fn get_id(req: HttpRequest) -> i32 {
-    let path = req.path();
-    let p = get_second_path_segment(path);
-    let token_key = get_token_key(p.to_string());
-    let auth_cookie = req
-        .cookie(&token_key)
+pub fn get_id(req: &HttpRequest) -> i32 {
+    let token = get_token(req);
+    let auth_cookie = token
         .expect("can not find auth token")
         .value()
         .parse::<String>()
@@ -91,4 +88,12 @@ pub fn create(directory: &String) {
     } else {
         println!("Directory already exists: {}", directory);
     }
+}
+
+pub fn get_token(req: &HttpRequest) -> Option<Cookie<'static>> {
+    let path = req.path();
+    let p = get_second_path_segment(path);
+    let token_key = get_token_key(p.to_string());
+    let auth_cookie = req.cookie(&token_key);
+    auth_cookie
 }

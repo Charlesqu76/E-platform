@@ -11,7 +11,7 @@ use sqlx::PgPool;
 
 #[get("")]
 pub async fn products(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id = get_id(req);
+    let id = get_id(&req);
     let result: Result<Vec<ProductInfo>, sqlx::Error> = sqlx::query_as::<_, ProductInfo>(
         "SELECT p.*, CAST(AVG(pur.rate) AS FLOAT) AS ratings
                 FROM product AS p
@@ -36,7 +36,7 @@ pub async fn add_product(
     req: HttpRequest,
     data: web::Json<AddProductInfo>,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let result = sqlx::query(
         "INSERT INTO product (name, description, price,  quantity, retailer)
@@ -63,7 +63,7 @@ pub async fn modify_product(
     req: HttpRequest,
     data: web::Json<ModifyProductInfo>,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let result = sqlx::query(
         "UPDATE product

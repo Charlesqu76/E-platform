@@ -13,7 +13,7 @@ use sqlx::PgPool;
 
 #[get("view")]
 pub async fn view(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let results = sqlx::query_as::<_, Purchase>(
         "SELECT time
@@ -39,7 +39,7 @@ pub async fn view(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
 
 #[get("buy")]
 pub async fn buy(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let results = sqlx::query_as::<_, Purchase>(
         "SELECT time
@@ -66,7 +66,7 @@ pub async fn buy(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
 
 #[get("gender")]
 pub async fn gender(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let results = sqlx::query_as::<_, Gender>(
         "SELECT gender, COUNT(gender)
@@ -91,7 +91,7 @@ pub async fn gender(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder
 
 #[get("device")]
 pub async fn device(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let results = sqlx::query_as::<_, Device>(
         "SELECT device, COUNT(device)
@@ -115,7 +115,7 @@ pub async fn device(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder
 
 #[get("geo")]
 pub async fn geo(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let results = sqlx::query_as::<_, Geo>(
         "SELECT geo, COUNT(geo)

@@ -12,7 +12,7 @@ use sqlx::PgPool;
 
 #[get("hostory")]
 pub async fn sales_history(pool: web::Data<PgPool>, req: HttpRequest) -> impl Responder {
-    let id = get_id(req);
+    let id = get_id(&req);
 
     let results = sqlx::query_as::<_, SalesInfo>(
         "SELECT * 

@@ -5,7 +5,7 @@ use crate::{
         BuyQuery, ProductComment, ProductInfo, ProductQuery, QueryDetail, QueryProducts,
         SummaryReturn, ViewQuery,
     },
-    util::{decode_jwt, format_url, get_id, get_second_path_segment, get_token_key},
+    util::{decode_jwt, format_url, get_id, get_second_path_segment, get_token, get_token_key},
 };
 use actix_web::{get, post, web, HttpRequest, HttpResponse, Responder};
 use reqwest::Client;
@@ -113,21 +113,26 @@ pub async fn view(
     query: web::Json<ViewQuery>,
     req: HttpRequest,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
-    let results = sqlx::query_as::<_, ProductComment>(
-        " INSERT INTO view (customer, product, geo, device) 
-        VALUES ($1, $2, $3, $4)",
-    )
-    .bind(id)
-    .bind(query.product_id)
-    .bind(query.geo.clone())
-    .bind(query.device.clone())
-    .fetch_all(pool.get_ref())
-    .await;
+    let auth_cookie = get_token(&req);
+    if auth_cookie == None {
+        HttpResponse::Ok().json({})
+    } else {
+        let id: i32 = get_id(&req);
+        let results = sqlx::query_as::<_, ProductComment>(
+            " INSERT INTO view (customer, product, geo, device) 
+            VALUES ($1, $2, $3, $4)",
+        )
+        .bind(id)
+        .bind(query.product_id)
+        .bind(query.geo.clone())
+        .bind(query.device.clone())
+        .fetch_all(pool.get_ref())
+        .await;
 
-    match results {
-        Ok(results) => HttpResponse::Ok().json({}),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        match results {
+            Ok(results) => HttpResponse::Ok().json({}),
+            Err(_) => HttpResponse::InternalServerError().finish(),
+        }
     }
 }
 
@@ -137,7 +142,7 @@ pub async fn buy(
     query: web::Json<BuyQuery>,
     req: HttpRequest,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
     let results = sqlx::query_as::<_, ProductComment>(
         " INSERT INTO purchase (customer, product, price ,geo, device) 
         VALUES ($1, $2, $3, $4)",

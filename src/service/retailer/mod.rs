@@ -20,7 +20,7 @@ pub async fn normal(
     query: web::Query<NormalQuery>,
     req: HttpRequest,
 ) -> impl Responder {
-    let id: i32 = get_id(req);
+    let id: i32 = get_id(&req);
 
     let q = NormalSend {
         id: id.to_string(),
