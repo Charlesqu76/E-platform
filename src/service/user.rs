@@ -1,23 +1,35 @@
 use crate::{
     model::user::{GetUserInfo, LoginInfo, UserInfo},
-    util::{create_jwt, get_token_key},
+    util::{create_jwt, get_second_path_segment, get_token_key},
 };
 use actix_web::{
     cookie::{
-        time::{self, OffsetDateTime},
+        time::{self},
         Cookie,
     },
-    get, post, web, HttpResponse, Responder,
+    get, post, web, HttpRequest, HttpResponse, Responder,
 };
 use sqlx::PgPool;
 
 #[post("login")]
-pub async fn login(pool: web::Data<PgPool>, login_info: web::Json<LoginInfo>) -> impl Responder {
+pub async fn login(
+    pool: web::Data<PgPool>,
+    login_info: web::Json<LoginInfo>,
+    req: HttpRequest,
+) -> impl Responder {
+    let path = req.path();
+    let p = get_second_path_segment(&path);
+    let mut table_name = "retailer";
+    if p == "ep" {
+        table_name = "customer"
+    }
+
     let result = sqlx::query_as::<_, UserInfo>(
         "SELECT * 
-        FROM retailer 
-        WHERE email = ($1) AND password = ($2)",
+        FROM $1 
+        WHERE email = $2 AND password = $3",
     )
+    .bind(table_name)
     .bind(&login_info.email)
     .bind(&login_info.password)
     .fetch_one(pool.get_ref())
