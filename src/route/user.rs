@@ -1,6 +1,8 @@
-use crate::service::user::{get_user_info, login};
+use crate::service::user::{ep_login, get_user_info, retailer_login};
 use actix_web::web;
 
 pub fn config(cfg: &mut web::ServiceConfig) {
-    cfg.service(login).service(get_user_info);
+    cfg.service(ep_login)
+        .service(retailer_login)
+        .service(get_user_info);
 }
