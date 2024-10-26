@@ -73,6 +73,7 @@ const EditProduct = () => {
       form.setFieldsValue(modifyData);
     } else {
       form.resetFields();
+      setOption(undefined);
     }
   }, [open]);
 
