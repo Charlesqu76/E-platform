@@ -43,7 +43,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         <h2 className="text-2xl font-semibold mb-2">{name}</h2>
         <p className="text-gray-700 mb-4 line-clamp-2">{description}</p>
         <p className="text-lg font-bold mb-2">${price.toFixed(2)}</p>
-        <p className="text-gray-600 mb-2">Retailer: {retailer}</p>
         <Star ratings={ratings} />
         {comments?.length && <Comments comments={comments} id={id} />}
       </div>

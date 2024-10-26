@@ -1,6 +1,5 @@
 import { myFetch } from "./fetch";
 import * as jose from "jose";
-import { logout } from "@/fetch";
 
 export { myFetch };
 

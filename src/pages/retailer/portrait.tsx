@@ -59,10 +59,6 @@ const Portrait = ({
     { name: "device", data: deviceData },
   ];
 
-  const clickAnalyze = () => {
-    console.log("clickAnalyze");
-  };
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-wrap items-center mb-4">
