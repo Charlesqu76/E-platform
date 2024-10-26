@@ -27,6 +27,7 @@ CREATE TABLE
         id SERIAL PRIMARY KEY,
         name varchar(255) UNIQUE,
         description text,
+        image varchar(255),
         price float NOT NULL CHECK (price > 0),
         quantity int NOT NULL CHECK (quantity > 0),
         remain_quantity int CHECK (remain_quantity > 0),

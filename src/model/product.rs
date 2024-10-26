@@ -4,6 +4,7 @@ use sqlx::FromRow;
 #[derive(Serialize, Deserialize, FromRow, Debug)]
 pub struct ProductInfo {
     id: i32,
+    image: Option<String>,
     name: String,
     description: String,
     price: f64,
@@ -16,12 +17,6 @@ pub struct ProductQuery {
     pub q: Option<String>,
     pub file: Option<String>,
     pub id: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SSS {
-    pub products: Vec<ProductInfo>,
-    pub query: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, FromRow, Debug)]
