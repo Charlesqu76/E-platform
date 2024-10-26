@@ -1,4 +1,3 @@
-import { login } from "@/fetch";
 import { Button, Form, FormProps, Input } from "antd";
 import { useState } from "react";
 const { Item } = Form;
@@ -9,16 +8,17 @@ type FieldType = {
 };
 
 interface IProps {
+  logFun: (param: any) => any;
   successCb: () => void;
   p: string;
 }
 
-const LoginComponent = ({ successCb, p }: IProps) => {
+const LoginComponent = ({ successCb, p, logFun }: IProps) => {
   const [loading, setLoading] = useState(false);
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     try {
       setLoading(true);
-      if (await login({ ...values, p })) {
+      if (await logFun({ ...values, p })) {
         successCb();
       } else {
       }
