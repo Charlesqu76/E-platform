@@ -43,7 +43,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(client.clone()))
             .service(
                 scope("/api")
-                    .service(Files::new("/uploads", "./uploads").show_files_listing())
                     .service(save_file)
                     .configure(retailer::config)
                     .configure(user::config)

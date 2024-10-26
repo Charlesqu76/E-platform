@@ -4,9 +4,6 @@ DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS retailer;
 DROP TABLE IF EXISTS customer;
 
-
-
-
 CREATE TABLE
     customer (
         id SERIAL PRIMARY KEY,
@@ -68,71 +65,25 @@ INSERT INTO
     customer (email, name, password, gender)
 VALUES
     (
-        'alice.johnson@example.com',
+        'alice@example.com',
         'Alice Johnson',
-        'password123',
-        0
-    ),
-    ('bob.smith@example.com', 'Bob Smith', 'qwerty456', 1),
-    (
-        'charlie.brown@example.com',
-        'Charlie Brown',
-        'letmein789',
+        'alice',
         1
-    ),
-    (
-        'diana.prince@example.com',
-        'Diana Prince',
-        'wonderwoman321',
-        1
-    ),
-    (
-        'ethan.hunt@example.com',
-        'Ethan Hunt',
-        'missionimpossible123',2
-
-    ),
-    (
-        'fiona.gallagher@example.com',
-        'Fiona Gallagher',
-        'shameless456',
-        2
-    ),
-    (
-        'george.costanza@example.com',
-        'George Costanza',
-        'serenitynow789',
-        2
-    ),
-    (
-        'hannah.baker@example.com',
-        'Hannah Baker',
-        'thirteenreasons456',0
     ),
     (
         'ian.malcolm@example.com',
         'Ian Malcolm',
-        'dinosaursrule123',2
-
-    ),
-    (
-        'jasmine.thomas@example.com',
-        'Jasmine Thomas',
-        'aladdin123',2
+        'dinosaursrule123',
+				2
     );
 
 INSERT INTO
     retailer (email, name, password)
 VALUES
     (
-        'retailer1@example.com',
+        'retailer@example.com',
         'Retailer One',
-        'retailpass1'
-    ),
-    (
-        'retailer2@example.com',
-        'Retailer Two',
-        'retailpass2'
+        'retailer'
     );
 
 INSERT INTO
@@ -228,53 +179,31 @@ VALUES
 
 INSERT INTO purchase (time, price, customer, product, geo, device, comment, rate)
 SELECT
-    -- Random timestamp between 2023-01-01 and NOW()
-    TIMESTAMP '2023-01-01' + random() * (NOW() - TIMESTAMP '2023-01-01'),
-
-    -- Random price between 1 and 1000
+    TIMESTAMP '2024-01-01' + random() * (NOW() - TIMESTAMP '2024-01-01'),
     FLOOR(1 + random() * 1000)::int,
-
-    -- Random customer ID between 1 and 9
-    FLOOR(1 + random() * 9)::int,
-
-    -- Random product ID between 1 and 4
-    FLOOR(1 + random() * 4)::int,
-
-    -- Random geo value from the list [NSW, VIC, QLD, SA, WA, TAS, ACT, NT]
+    FLOOR(1 + random() * 2)::int,
+    FLOOR(1 + random() * 2)::int,
     (ARRAY['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'ACT', 'NT'])[FLOOR(1 + random() * 8)::int],
-
-    -- Random device value from the list [PHONE, LAPTOP]
     (ARRAY['PHONE', 'LAPTOP'])[FLOOR(1 + random() * 2)::int],
-
-    -- Random comment (null or some text for simplicity)
     CASE
         WHEN random() < 0.5 THEN NULL
         ELSE 'Sample comment ' || FLOOR(random() * 1000)::text
     END,
-
-    -- Random rate between 1 and 5, or NULL
     CASE
         WHEN random() < 0.7 THEN FLOOR(1 + random() * 5)::int
         ELSE NULL
     END
 
-FROM generate_series(1, 100) AS s;
+FROM generate_series(1, 10) AS s;
+
+
 -- view
 INSERT INTO view (time, customer, product, geo, device)
 SELECT
-    -- Random timestamp between 2023-01-01 and NOW()
-    TIMESTAMP '2023-01-01' + random() * (NOW() - TIMESTAMP '2023-01-01'),
-
-    -- Random customer ID between 1 and 9
-    FLOOR(1 + random() * 9)::int,
-
-    -- Random product ID between 1 and 4
-    FLOOR(1 + random() * 4)::int,
-
-    -- Random geo value from the list [NSW, VIC, QLD, SA, WA, TAS, ACT, NT]
+    TIMESTAMP '2024-01-01' + random() * (NOW() - TIMESTAMP '2024-01-01'),
+    FLOOR(1 + random() * 2)::int,
+    FLOOR(1 + random() * 3)::int,
     (ARRAY['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'ACT', 'NT'])[FLOOR(1 + random() * 8)::int],
-
-    -- Random device value from the list [PHONE, LAPTOP]
     (ARRAY['PHONE', 'LAPTOP'])[FLOOR(1 + random() * 2)::int]
 
-FROM generate_series(1, 1000) AS s;
+FROM generate_series(1, 100) AS s;

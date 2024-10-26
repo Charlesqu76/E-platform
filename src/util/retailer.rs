@@ -23,7 +23,7 @@ pub fn categorize_data(
             price: 0.0,
         });
 
-        summary.quantity += item.quantity;
+        summary.quantity += 1;
         summary.price = (summary.price + f64::from(item.price)) / f64::from(2)
     }
 
