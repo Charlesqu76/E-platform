@@ -11,4 +11,6 @@ export const AUTH_MAP = {
   retailer: "retailer_auth_token",
 };
 
+
+
 export const DEFAULT_PIC = "https://via.placeholder.com/300";
